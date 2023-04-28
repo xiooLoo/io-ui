@@ -1,0 +1,12 @@
+# 忽略目录
+examples/
+packages/
+public/
+src/
+
+# 忽略指定文件
+.eslintrc.js
+vue.config.js
+babel.config.js
+README.md
+*.map

@@ -1,0 +1,16 @@
+.yxt-pagination-container {
+  background: #fff;
+  padding: 10px 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  .yxt-pagination-box-totalbox{
+    font-size:14px;
+    color: $yxt-color-grey-90;
+  }
+}
+.hidden {
+    display: none;
+  }

@@ -1,0 +1,50 @@
+.yxt-page-header {
+  width: 100%;
+  background: $yxt-color-white;
+  // margin: 24px 0;
+}
+.yxt-page-header-content {
+    padding: 0  24px;
+  }
+.yxt-page-header-top {
+  // position: sticky;
+  /* position: absolute; */
+  width: 100%;
+  background-color: #fff;
+  height: $yxt-font-size-px-56;
+  font-weight: 600;
+  font-size: $yxt-font-size-em-16;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $yxt-color-white;
+  /* z-index: 999; */
+  /* top: 24px; */
+  .left-content {
+    align-items: center;
+    display: flex;
+    .left-cut {
+      width: 4px;
+      height: 16px;
+      background: $yxt-color-primary;
+      display: block;
+      margin-left: 24px;
+      margin-right: 12px;
+    }
+  p {
+    font-size: $yxt-font-size-em-16;
+    font-family: MicrosoftYaHeiSemibold;
+    font-weight: bold;
+    color: $yxt-color-grey;
+    margin: 10px 0;
+
+  }
+  }
+
+  .botton-class {
+    /* .mixin_button_i(); */
+    /* .mixin_radius_lt_250px(); */
+    width: 64px;
+    margin-right:24px ;
+  }
+}

@@ -1,0 +1,60 @@
+.yxt-seperator-tab-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  .to-tabs__item {
+    height: 48px;
+    line-height: 48px;
+    padding-left: 24px;
+    color: $yxt-color-grey-70;
+    font-size: $yxt-font-size-em-14;
+    &.is-disabled {
+      color: $yxt-color-grey-30 !important;
+      cursor: not-allowed;
+    }
+  }
+
+  .to-tabs__active-bar {
+    height: 2px;
+    width: 80px;
+    background-color: $yxt-color-primary;
+  }
+
+  .to-tabs__nav-wrap::after {
+    content: "|";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    z-index: 1;
+  }
+
+  .to-tabs__header {
+    margin: 0;
+  }
+
+  .to-tabs__item.is-active {
+    color: $yxt-color-primary;
+  }
+
+  .seperator-tab {
+    width: 100%;
+  }
+
+  .to-badge__content.is-fixed {
+    position: absolute;
+    top: 12px;
+    right: 4px;
+  }
+
+  .to-tabs--bottom .to-tabs__item.is-bottom:last-child,
+  .to-tabs--bottom .to-tabs__item.is-top:last-child,
+  .to-tabs--top .to-tabs__item.is-bottom:last-child,
+  .to-tabs--top .to-tabs__item.is-top:last-child {
+    padding-right: 20px;
+  }
+}

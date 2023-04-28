@@ -1,0 +1,25 @@
+.yxt-breadcrumb-box {
+  .yxt-breadcrumb.to-breadcrumb {
+    font-size: 16px;
+    line-height: 56px;
+    height: 56px;
+    background-color: #fff;
+
+    .item-normal {
+      cursor: text;
+      color: #586073;
+      opacity: 0.6;
+      font-weight: normal;
+    }
+
+    .item-redirect {
+      font-weight: normal;
+      color: #586073;
+      opacity: 0.6;
+    }
+
+    .item-last {
+      color: #14203b;
+    }
+  }
+}

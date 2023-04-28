@@ -1,0 +1,194 @@
+@import "mixins/mixins";
+@import "common/var";
+
+@include b(carousel) {
+  position: relative;
+
+  @include m(horizontal) {
+    overflow-x: hidden;
+  }
+
+  @include m(vertical) {
+    overflow-y: hidden;
+  }
+
+  @include e(container) {
+    position: relative;
+    height: 300px;
+  }
+
+  @include e(arrow) {
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    height: $--carousel-arrow-size;
+    width: $--carousel-arrow-size;
+    cursor: pointer;
+    transition: .3s;
+    border-radius: 50%;
+    background-color: $--carousel-arrow-background;
+    color: $--color-white;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+    text-align: center;
+    font-size: $--carousel-arrow-font-size;
+
+    @include m(left) {
+      left: 16px;
+    }
+    @include m(right) {
+      right: 16px;
+    }
+    &:hover {
+      background-color: $--carousel-arrow-hover-background;
+    }
+
+    & i {
+      cursor: pointer;
+    }
+  }
+
+  @include e(indicators) {
+    position: absolute;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: #{$--index-normal + 1};
+
+    @include m(horizontal) {
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    @include m(top) {
+      top: 0;
+    }
+    @include m(bottom) {
+      bottom: 0;
+    }
+    @include m(vertical) {
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    @include m(right) {
+      right: 0;
+    }
+    @include m(left) {
+      left: 0;
+    }
+
+    @include m(outside) {
+      bottom: #{$--carousel-indicator-height + $--carousel-indicator-padding-vertical * 2};
+      text-align: center;
+      position: static;
+      transform: none;
+      background-color:$yxt-color-grey-15;
+      width:fit-content;
+      margin:0 auto;
+      margin-top:12px;
+      padding:0 4px;
+      display: flex;
+      border-radius:$--carousel-indicator-outside-horizontal;
+      .to-carousel__indicator:hover button {
+        opacity: 1;
+      }
+      button {
+        background-color: $--color-white;
+        opacity: 0.5;
+      }
+    }
+
+    @include m(labels) {
+      left: 0;
+      right: 0;
+      transform: none;
+      text-align: center;
+
+      .to-carousel__button {
+        height: auto;
+        width: auto;
+        padding: 2px 18px;
+        font-size: 12px;
+      }
+
+      .to-carousel__indicator {
+        padding: 6px 4px;
+      }
+    }
+  }
+
+  @include e(indicator) {
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover button {
+      opacity: 0.72;
+    }
+
+    @include m(horizontal) {
+      display: inline-block;
+      padding: $--carousel-indicator-padding-vertical $--carousel-indicator-padding-horizontal;
+    }
+
+    @include m(vertical) {
+      padding: $--carousel-indicator-padding-horizontal $--carousel-indicator-padding-vertical;
+      .to-carousel__button {
+        width: $--carousel-indicator-height;
+        height: $--carousel-indicator-width;
+      }
+    }
+
+    @include when(active) {
+      button {
+        opacity: 1;
+        // width:$--carousel-indicator-active-width;
+      }
+    }
+  }
+
+  @include e(button) {
+    display: block;
+    opacity: 0.5;
+    width: $--carousel-indicator-width;
+    height: $--carousel-indicator-height;
+    background-color: $--color-white;
+    border: none;
+    border-radius:$--carousel-indicator-radius;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    transition: .3s;
+  }
+}
+
+.carousel-arrow-left-enter,
+.carousel-arrow-left-leave-active {
+  transform: translateY(-50%) translateX(-10px);
+  opacity: 0;
+}
+
+.carousel-arrow-right-enter,
+.carousel-arrow-right-leave-active {
+  transform: translateY(-50%) translateX(10px);
+  opacity: 0;
+}
+.to-carousel__indicators--vertical{
+  .to-carousel__indicator.is-active button{
+    height:$--carousel-indicator-active-width;
+  }
+}
+.to-carousel__indicators--horizontal {
+  .to-carousel__indicator.is-active button{
+    width:$--carousel-indicator-active-width;
+  }
+}
+.to-carousel__indicators--outside{
+  .to-carousel__indicator--horizontal{
+    padding:4px 2px;
+  }
+}

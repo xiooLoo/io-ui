@@ -1,0 +1,9 @@
+@mixin card-wrraper-sylte-com($padding,$padingBottom)  {
+  .card-style {
+    padding: $padding ;
+    padding-bottom: $padingBottom;
+    border-radius: 2px;
+    background-color: #fff;
+  }
+}
+

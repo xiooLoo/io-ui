@@ -1,0 +1,12 @@
+.yxt-timeline-left {
+  margin-left: 150px;
+    .to-timeline-item__timestamp.is-top {
+      margin-left: -150px;
+      padding-top:0;
+    }
+    .to-timeline-item__timestamp.is-bottom {
+      margin-left: -150px;
+      padding-top:0;
+    }
+}
+

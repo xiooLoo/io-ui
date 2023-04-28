@@ -1,0 +1,11 @@
+.actions-btns-box {
+  display: flex;
+  flex-flow: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  .to-button {
+    margin: 0 12px 0 0;
+  }
+}

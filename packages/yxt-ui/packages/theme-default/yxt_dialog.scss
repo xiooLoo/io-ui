@@ -1,0 +1,70 @@
+@import url('../../../assets/scss/global.scss');
+.my-dialog-default {
+  /deep/ .to-dialog__wrapper {
+    z-index: 2100;
+  }
+  .to-dialog__header {
+    padding: 24px 24px 0px;
+    font-size: $yxt-font-size-em-16;
+    color: #14203B;
+    font-weight: 500;
+
+  }
+
+  .to-dialog__footer {
+    padding:24px;
+  }
+}
+ .to-button--medium {
+  padding: 0px;
+  font-size: 14px;
+  width: 60px;
+  height: 32px; 
+  border-radius: 2px;
+}
+
+.dialog-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100px;
+  max-height: 50vh;
+  overflow-y: auto;
+  .iconfont {
+    font-size: 22px;
+  }
+}
+
+.dialog-box-i {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .promit-tip {
+    font-size: $yxt-font-size-em-16;
+    color: $yxt-color-grey;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+}
+
+.warning-icon {
+  color: $yxt-color-warning;
+}
+
+.error-icon {
+  color: $yxt-color-error;
+}
+
+.slot-content {
+  width: 100%;
+  color: #586073;
+  font-size: 14px;
+}
+
+.yxt-icon {
+  margin: 0 12px 0 0;
+}

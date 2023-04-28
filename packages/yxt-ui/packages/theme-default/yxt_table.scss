@@ -1,0 +1,32 @@
+.yxt-table-box {
+  .yxt-button-type-primary {
+    @include mixin_button_deepbg_lightfont;
+  }
+
+  .yxt-button-type-lightblue {
+    @include mixin_button_lightbg_deepfont;
+  }
+
+  .yxt-button-type-normal {
+    @include mixin_button_lightbg_lightfont;
+  }
+}
+
+.yxt-actions-btns-box {
+  display: flex;
+  flex-flow: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  .to-button {
+    margin: 0 6px 0 0;
+  }
+}
+
+.yxt-table-action-icon {
+  cursor: pointer;
+  color: #2e78ff;
+  font-size: 20px;
+  margin-left: 10px;
+}

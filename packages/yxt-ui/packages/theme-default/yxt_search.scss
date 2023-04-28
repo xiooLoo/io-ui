@@ -1,0 +1,38 @@
+.yxt-search-box {
+  background: #fff;
+  padding: 20px 24px;
+
+  .search-item {
+    height: 50px;
+    display: flex;
+    align-items: center;
+
+    .label {
+      padding-right: 10px;
+    }
+
+    .content {
+      flex: 1;
+
+      .to-input,
+      .to-select,
+      .to-cascader,
+      .to-autocomplete {
+        width: 100%;
+      }
+    }
+  }
+
+  .search-btn {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .toggleBtn {
+      margin-left: 20px;
+      color: $yxt-color-primary;
+      cursor: pointer;
+    }
+  }
+}
