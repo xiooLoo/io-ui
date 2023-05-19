@@ -81,7 +81,28 @@
       <template v-else>
         <template v-for="item in tableColumns">
           <to-table-column
-            v-if="item.filters"
+            v-if="item.filters&&!item.isscope"
+            :key="item.key"
+            :prop="item.key"
+            :label="item.title"
+            :width="item.width"
+            :align="item.align"
+            :fixed="item.fixed"
+            :formatter="item.formatter"
+            :column-key="item.columnKey"
+            :filters="item.filters?item.filters: []"
+            :filter-multiple="item.filtermultiple"
+            :filter-method="filterTag"
+            :min-width="item.minWidth"
+            :sortable="item.sortable"
+            :sort-method="(item.sortable && sortway === 'method') ? sortMethod : null"
+            :sort-by="(item.sortable && sortway === 'by') ? sortBy : null"
+            :show-overflow-tooltip="item.tooltip"
+            :filter-placement="item.filterPlacement"
+          >
+          </to-table-column>
+          <to-table-column
+            v-else-if="item.filters&&item.isscope"
             :key="item.key"
             :prop="item.key"
             :label="item.title"
@@ -163,7 +184,16 @@
           <template slot="header" >
             <slot name="customTableColHead"></slot>
           </template>
-          <template slot-scope="scope">
+          <template v-if="item.autoScope"  slot-scope="scope">
+            <slot
+              :index="scope.$index"
+              :row="scope.row"
+              name="isscope"
+              :rowKey="item.key"
+              :item="item"
+            />
+          </template>
+          <template v-else slot-scope="scope">
           {{scope.row[item.key]}}
           </template>
           </to-table-column>
@@ -427,6 +457,10 @@ export default {
       type: String,
       default: 'id'
     },
+    lazyHandle: {
+      type: Boolean,
+      default: false
+    },
     treeProp: {
       type: Object,
       default: () => {
@@ -565,6 +599,9 @@ export default {
     },
     filterTag(value, row, column) {
       // return true;
+      if (this.lazyHandle) {
+        return true
+      }
       const property = column['property'];
       return row[property] === value;
     },
@@ -592,6 +629,9 @@ export default {
       return this.actions(query);
     },
     sortBy() {
+      if (this.lazyHandle) {
+        return true
+      }
       let query = {
         key: 'sortBy',
         obj: {}

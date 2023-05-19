@@ -2,7 +2,7 @@
   <div class="yxt-biss-commons">
     <to-card>
       <div slot="header">
-        <span class="card-perfix-border">{{ comp.todoTitle }}</span>
+        <span class="card-perfix-border">{{ comp.title }}</span>
         <to-popover
           v-model="isShowPopover"
           placement="bottom"
@@ -30,7 +30,16 @@ import ToPopover from '../../../../../element-ui/packages/popover'
 import ToButton from '../../../../../element-ui/packages/button'
 import PopCard from '../components/PopCard.vue'
 
+const base = {
+  id: 'YxtBissCommons',
+  compName: 'YxtBissCommons',
+  title: '常用功能',
+  icon: 'icon-Calendar uiicon',
+  type: 'biss'
+}
+
 export default {
+  base,
   name: 'YxtBissCommons',
   components: {
     PopCard,
@@ -42,11 +51,7 @@ export default {
     comp: {
       type: Object,
       default: () => {
-        return {
-          id: 'yxt-biss-commons',
-          compName: 'YxtBissApps',
-          todoTitle: '常用功能'
-        }
+        return base
       }
     }
   },

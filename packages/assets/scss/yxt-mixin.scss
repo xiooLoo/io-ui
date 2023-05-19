@@ -75,7 +75,7 @@
 }
 
 // iconfont 图标设置
-@mixin mixin_circle_icon($fontfamily: "iconfont", $icon: none, $size: 16px, $color: $yxt-color-info-hex-8f9399) {
+@mixin mixin_circle_icon($fontfamily: "uiicon", $icon: none, $size: 16px, $color: $yxt-color-info-hex-8f9399) {
   font-family: $fontfamily;
   content: $icon;
   font-size: $size;

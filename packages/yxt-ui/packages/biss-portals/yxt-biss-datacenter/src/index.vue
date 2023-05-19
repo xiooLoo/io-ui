@@ -2,7 +2,7 @@
   <div class="yxt-biss-datacenter">
     <to-card>
       <div slot="header">
-        <span class="card-perfix-border">{{ comp.todoTitle }}</span>
+        <span class="card-perfix-border">{{ comp.title }}</span>
         <to-button slot="reference" type="text" style="float: right; padding: 3px 0">更多</to-button>
       </div>
       <div class="datacenter-list">
@@ -46,7 +46,16 @@ import YxtDialog from '../../../yxt-dialog'
 import ToCard from '../../../../../element-ui/packages/card'
 import ToButton from '../../../../../element-ui/packages/button'
 
+const base = {
+  id: 'YxtBissDatacenter',
+  compName: 'YxtBissDatacenter',
+  title: '资料中心',
+  icon: 'icon-Attachment uiicon',
+  type: 'biss'
+}
+
 export default {
+  base,
   name: 'YxtBissDatacenter',
   components: {
     YxtDialog,
@@ -57,11 +66,7 @@ export default {
     comp: {
       type: Object,
       default: () => {
-        return {
-          id: 'yxt-biss-datacenter',
-          compName: 'YxtBissDatacenter',
-          todoTitle: '资料中心'
-        }
+        return base
       }
     }
   },

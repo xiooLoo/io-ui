@@ -45,6 +45,13 @@ export default {
   },
   props: {
     /**
+     * 动态组件标识（非必须）
+     */
+    i: {
+      type: String,
+      default: '0'
+    },
+    /**
      * 是否自定义图片
      */
     isCustom: {

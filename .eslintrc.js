@@ -26,7 +26,7 @@ module.exports = {
       'classes': true
     } ], /**禁止在变量定义之前使用它们 */
     'no-param-reassign': [ 'error', { 'props': false } ], /**禁止对 function 的参数进行重新赋值 */
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off', /**禁用 console */
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off', /**禁用 console */
     'comma-dangle': [ 'error', 'never' ], /**禁止使用拖尾逗号 */
     'indent': [ 'error', 2 ], /**2个空格缩进 */
     'max-len': [ 'error', { 'code': 1000 } ], /**强制一行的最大长度1000 */

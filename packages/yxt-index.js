@@ -49,6 +49,12 @@ import YxtBissCommons from './yxt-ui/packages/biss-portals/yxt-biss-commons/inde
 import YxtBissNotices from './yxt-ui/packages/biss-portals/yxt-biss-notices/index';
 import YxtBissDatacenter from './yxt-ui/packages/biss-portals/yxt-biss-datacenter/index';
 import YxtBissForgets from './yxt-ui/packages/biss-portals/yxt-biss-forgets/index';
+// [biss]-轮播图
+import FuncCarousel from './yxt-ui/packages/biss-portals/yxt-func-carousel/index';
+const YxtFuncCarousel = FuncCarousel.YxtFuncCarousel
+const YxtFuncCarouselPanelContent = FuncCarousel.YxtFuncCarouselPanelContent
+const YxtFuncCarouselPanelExtyle = FuncCarousel.YxtFuncCarouselPanelExtyle
+
 // 典型页面
 import YxtBissPage from './yxt-ui/packages/biss-pages/yxt-biss-page/index';
 import YxtBissDetails from './yxt-ui/packages/biss-pages/yxt-biss-details/index';
@@ -96,6 +102,9 @@ export const customComponents = [
   YxtBissNotices,
   YxtBissDatacenter,
   YxtBissForgets,
+  YxtFuncCarousel,
+  YxtFuncCarouselPanelContent,
+  YxtFuncCarouselPanelExtyle,
   YxtBissPage,
   YxtBissForm,
   YxtBissDetails

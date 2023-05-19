@@ -100,7 +100,6 @@
               <to-date-picker
                 v-else-if="['date', 'datetime', 'dates', 'year', 'month', 'week', 'daterange', 'monthrange', 'datetimerange'].includes(item.type)"
                 v-model="formKey[item.id]"
-                size="small"
                 :clearable="item.clearable"
                 :type="item.type"
                 :value-format="item.valueFormat"

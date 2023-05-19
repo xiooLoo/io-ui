@@ -53,7 +53,23 @@ const icons = {
   固定资产: 'https://pic.imgdb.cn/item/636c97b216f2c2beb1d9319f.png'
 }
 
+const base = {
+  id: 'YxtBissApps',
+  compName: 'YxtBissApps',
+  title: '系统应用',
+  icon: 'icon-Check-Circle uiicon',
+  type: 'biss',
+  sliceIndex: 5,
+  dialogConfig: {
+    title: '提示'
+  },
+  requestConfig: {
+    accessToken: '请设置accessToken'
+  }
+}
+
 export default {
+  base,
   name: 'YxtBissApps',
   components: {
     YxtDialog
@@ -63,17 +79,7 @@ export default {
     comp: {
       type: Object,
       default: () => {
-        return {
-          compId: '0',
-          compName: 'YxtBissApps',
-          sliceIndex: 5,
-          dialogConfig: {
-            title: '提示'
-          },
-          requestConfig: {
-            accessToken: '请设置accessToken'
-          }
-        }
+        return base
       }
     },
     action: {
@@ -109,7 +115,7 @@ export default {
     async toFetchSystemList() {
       const config = { ...this.requestConfig }
       await fetchSystemList(config).then(res => {
-        this.loadingEl.close()
+        // this.loadingEl.close()
         if (res && res.code == 0) {
           const otherCards = ['004', '0014', '003', '015']
           res.data.push({

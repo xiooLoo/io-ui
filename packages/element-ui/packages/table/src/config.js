@@ -87,11 +87,11 @@ export const cellForced = {
   }
 };
 
-export function defaultRenderCell(h, { row, column, $index }) {
+export function defaultRenderCell(h, { row, column, $index,fromRef }) {
   const property = column.property;
   const value = property && getPropByPath(row, property).v;
   if (column && column.formatter) {
-    return column.formatter(row, column, value, $index);
+    return column.formatter(row, column, value, $index, fromRef);
   }
   return value;
 }

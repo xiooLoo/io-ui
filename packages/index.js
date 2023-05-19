@@ -97,6 +97,7 @@ import Upload from './element-ui/packages/upload';
 import { customComponents } from './yxt-index';
 import YxtMessage from './yxt-ui/packages/yxt-message/index';
 import { YxtGridItem, YxtGridLayout } from './yxt-ui/packages/yxt-grid-layout/index';
+import lodash from 'lodash'
 
 const components = [
   Alert,
@@ -207,7 +208,7 @@ const install = function (Vue, opts = {}) {
     size: opts.size || '',
     zIndex: opts.zIndex || 2000
   };
-
+  Vue.prototype._ = lodash;
   Vue.prototype.$loading = Loading.service;
   Vue.prototype.$msgbox = MessageBox;
   Vue.prototype.$alert = MessageBox.alert;

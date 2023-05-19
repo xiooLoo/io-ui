@@ -2,7 +2,7 @@
   <div class="yxt-biss-notices">
     <to-card>
       <div slot="header">
-        <span class="card-perfix-border">{{ comp.todoTitle }}</span>
+        <span class="card-perfix-border">{{ comp.title }}</span>
         <to-button slot="reference" type="text" style="float: right; padding: 3px 0">更多</to-button>
       </div>
       <div class="notices-list">
@@ -49,7 +49,16 @@ import ToCard from '../../../../../element-ui/packages/card'
 import ToButton from '../../../../../element-ui/packages/button'
 import ToTag from '../../../../../element-ui/packages/tag'
 
+const base = {
+  id: 'YxtBissNotices',
+  compName: 'YxtBissNotices',
+  title: '通知公告',
+  icon: 'icon-User uiicon',
+  type: 'biss'
+}
+
 export default {
+  base,
   name: 'YxtBissNotices',
   components: {
     YxtDialog,
@@ -61,11 +70,7 @@ export default {
     comp: {
       type: Object,
       default: () => {
-        return {
-          id: 'yxt-biss-notices',
-          compName: 'YxtBissNotices',
-          todoTitle: '通知公告'
-        }
+        return base
       }
     }
   },

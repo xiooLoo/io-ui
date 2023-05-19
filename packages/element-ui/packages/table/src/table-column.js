@@ -142,7 +142,6 @@ export default {
       });
       return column;
     },
-
     setColumnRenders(column) {
       // renderHeader 属性不推荐使用。
       if (this.renderHeader) {
@@ -174,6 +173,19 @@ export default {
           if (this.$scopedSlots.default) {
             children = this.$scopedSlots.default(data);
           } else {
+            if(data._self){
+              function findComponentUpward (context, componentName) {  
+                let parent = context.$parent;  
+                let name = parent.$options.name;
+                while(parent && (!name || [componentName].indexOf(name) < 0)) {
+                       parent = parent.$parent;
+                        if(parent)
+                            name = parent.$options.name;
+                 }
+                return parent;
+              }
+              data.fromRef = findComponentUpward(data._self,'yxt-table-widget')
+            }
             children = originRenderCell(h, data);
           }
           const prefix = treeCellPrefix(h, data);

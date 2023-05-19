@@ -2,7 +2,7 @@
   <div class="yxt-biss-forgets">
     <to-card>
       <div slot="header">
-        <span class="card-perfix-border">{{ comp.todoTitle }}</span>
+        <span class="card-perfix-border">{{ comp.title }}</span>
         <span slot="reference" class="forgets-tabs" style="float: right;">
           <span class="tabs-item" :class="activeTab === 'unfinish' ? 'active-tab' : 'unactive-tab'" @click="activeTab = 'unfinish'">未完成</span>
           <span class="tabs-item" :class="activeTab === 'finished' ? 'active-tab' : 'unactive-tab'" @click="activeTab = 'finished'">已完成</span>
@@ -49,7 +49,16 @@
 import YxtDialog from '../../../yxt-dialog'
 import ToCard from '../../../../../element-ui/packages/card'
 
+const base = {
+  id: 'YxtBissForgets',
+  compName: 'YxtBissForgets',
+  title: '备忘清单',
+  icon: 'icon-Time uiicon',
+  type: 'biss'
+}
+
 export default {
+  base,
   name: 'YxtBissForgets',
   components: {
     YxtDialog,
@@ -59,11 +68,7 @@ export default {
     comp: {
       type: Object,
       default: () => {
-        return {
-          id: 'yxt-biss-forgets',
-          compName: 'YxtBissForgets',
-          todoTitle: '备忘清单'
-        }
+        return base
       }
     }
   },

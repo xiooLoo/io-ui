@@ -16,7 +16,7 @@
   >
     <div class="drawer-top">
       <p slot="title" class="single-dialog-title">{{ title }}</p>
-      <div class="clone-btn-box"><i class="iconfont iconclose" @click="openOrClose" /></div>
+      <div class="clone-btn-box"><i class="uiicon iconclose" @click="openOrClose" /></div>
     </div>
     <div class="my-drawer">
       <div class="my-drawer-content">

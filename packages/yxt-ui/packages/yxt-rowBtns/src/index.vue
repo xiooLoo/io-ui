@@ -1,5 +1,5 @@
 <template>
-  <div v-if="rowBtns.length > 0" >
+  <div v-if="rowBtns.length > 0" :style="extyle">
     <!-- class="actions-btns-box" -->
     <template v-for="btn in rowBtns">
       <template v-if="btn.isIcon">
@@ -67,7 +67,25 @@ export default {
     rowBtns: {
       required: true,
       type: Array,
-      default: () => []
+      default: () => [
+        /* { label: '新增', value: 'add', type: 'normal' },
+        { label: '删除', value: 'del', type: 'primary', disabled: false },
+        { label: '编辑', value: 'edit', isIcon: true, icon: 'to-icon-warning' }*/
+      ]
+    },
+    /**
+     * 按钮flex布局，自定义Style
+     */
+    extyle: {
+      type: Object,
+      default: () => {
+        return {
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center'
+        }
+      }
     },
     /**
      * 所有@click 事件，通过key区分事件具体类型

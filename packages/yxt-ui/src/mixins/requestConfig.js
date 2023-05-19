@@ -5,7 +5,7 @@ export default {
         accessToken: this.comp.requestConfig?.accessToken,
         requestUrl: this.comp.requestConfig?.requestUrl
       },
-      loadingEl: this.$loading({ text: 'Loading...' })
+      loadingEl: this.$loading()
     }
   },
   mounted() {

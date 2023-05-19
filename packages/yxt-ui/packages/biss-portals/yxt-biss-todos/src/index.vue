@@ -2,7 +2,7 @@
   <div class="yxt-biss-todos">
     <to-card>
       <div slot="header">
-        <span class="card-perfix-border">{{ comp.todoTitle }}</span>
+        <span class="card-perfix-border">{{ comp.title }}</span>
       </div>
       <div class="todos-list">
           <div v-for="(item, index) in todos" :key="index" class="todo-list">
@@ -27,7 +27,16 @@ import ToCol from '../../../../../element-ui/packages/col'
 import { fetchSystemList, fetchTodoList } from '@/api/index'
 import requestConfig from '@yxtui/src/mixins/requestConfig'
 
+const base = {
+  id: 'YxtBissTodos',
+  compName: 'YxtBissTodos',
+  icon: 'icon-Sort uiicon',
+  title: '待办事项',
+  type: 'biss'
+}
+
 export default {
+  base,
   name: 'YxtBissTodos',
   components: {
     ToCard,
@@ -39,11 +48,7 @@ export default {
     comp: {
       type: Object,
       default: () => {
-        return {
-          id: 'yxt-biss-todos',
-          compName: 'YxtBissApps',
-          todoTitle: '待办事项'
-        }
+        return base
       }
     }
   },
@@ -62,7 +67,7 @@ export default {
     async toFetchSystemList() {
       const config = { ...this.requestConfig }
       await fetchSystemList(config).then(res => {
-        this.loadingEl.close()
+        // this.loadingEl.close()
         if (res && res.code == 0) {
           res.data.push({
             code: 'isNext',
@@ -79,7 +84,7 @@ export default {
     async toFetchTodoList(apps) {
       const config = { ...this.requestConfig }
       await fetchTodoList(config).then(res => {
-        this.loadingEl.close()
+        // this.loadingEl.close()
         if (res && res.code == 0) {
           this.dowith(res.data, apps)
         }
