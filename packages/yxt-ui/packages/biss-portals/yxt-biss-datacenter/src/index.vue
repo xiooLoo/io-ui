@@ -1,22 +1,25 @@
 <template>
-  <div class="yxt-biss-datacenter">
-    <to-card>
-      <div slot="header">
-        <span class="card-perfix-border">{{ comp.title }}</span>
-        <to-button slot="reference" type="text" style="float: right; padding: 3px 0">更多</to-button>
+  <div class="yxt-biss-datacenter" @click.stop="toClick">
+    <to-card class="datacenter-card">
+      <div slot="header" class="title-flex">
+        <div class="title-flex-lf">
+          <yxt-svg-icon :icon="getExtyleValue('iconClazz').current" style="width:20px;margin: 0 6px 0 10px"></yxt-svg-icon>
+          <span>{{ comp.panel.content.base_rows[0].value }}</span>
+        </div>
+        <span slot="reference" style="cursor:pointer; float: right; padding: 0px 0;font-size:14px" @click.stop="toMore">更多</span>
       </div>
       <div class="datacenter-list">
-        <template v-for="(item, index) in datacenterArr">
+        <template v-for="(item, index) in dataList">
           <div :key="index" class="list-item" @click="toPreview(item)">
               <div class="list-item-link">
-                <span class="to-icon-link"></span>
+                <yxt-svg-icon :icon="compFileType(item.fileName)" style="width:20px;margin: 0 6px 0 10px"></yxt-svg-icon>
               </div>
               <div class="list-item-right">
                 <div class="list-item-ups">
                   <span>{{ item.fileName }}</span>
                 </div>
                 <div class="list-item-sub" @click.stop="toDownload(item)">
-                  <span class="datacenter-type-name to-icon-download"></span>
+                  <yxt-svg-icon class="datacenter-type-name" icon="common_download"></yxt-svg-icon>
                 </div>
               </div>
           </div>
@@ -29,14 +32,11 @@
       :isAppendToBody="true"
       :isModalclose="true"
       :isShowClose="true"
-      :btns="[]"
-      :dialogConfig="comp.dialogConfig"
+      :dialogInfo="comp.dialogConfig"
+      :actions="dialogActions"
     >
-      <div slot="content" class="card-item-next-content">
-        <span>{{ currentFile.fileName }} - {{ currentFile.createAt }}</span>
-        <br>
-        <br>
-        <span>详细预览内容，略......</span>
+      <div class="card-item-next-content">
+        <YxtViewer :file="currentFile.nextInfo" :url="currentFile.nextUrl"></YxtViewer>
       </div>
     </yxt-dialog>
   </div>
@@ -44,131 +44,100 @@
 <script>
 import YxtDialog from '../../../yxt-dialog'
 import ToCard from '../../../../../element-ui/packages/card'
-import ToButton from '../../../../../element-ui/packages/button'
-
-const base = {
-  id: 'YxtBissDatacenter',
-  compName: 'YxtBissDatacenter',
-  title: '资料中心',
-  icon: 'icon-Attachment uiicon',
-  type: 'biss'
-}
+import { DATACENTER_BASE } from './config.js'
+import { fetchDataCenterList } from '@/api/index'
+import mixin_requestConfig from '@yxtui/src/mixins/requestConfig'
+import tools from '@yxtui/src/utils/tools'
+import YxtViewer from '../components/YxtViewer'
 
 export default {
-  base,
-  name: 'YxtBissDatacenter',
+  base: DATACENTER_BASE,
+  name: 'YxtBissDataCenter',
   components: {
     YxtDialog,
     ToCard,
-    ToButton
+    YxtViewer
   },
+  mixins: [mixin_requestConfig],
   props: {
     comp: {
       type: Object,
       default: () => {
-        return base
+        return DATACENTER_BASE
       }
+    },
+    actions: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
-    let datacenterArr = [
-      {
-        createAt: '2022-07-13 09:15:17',
-        deleteFlag: 0,
-        fileId: '996706374955044864',
-        fileName: '公务仓申请入库 (5).xlsx',
-        fileSize: '9156',
-        folderName: '',
-        id: '996706375034736640',
-        parentId: '0',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-13 09:15:17',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:18:24',
-        deleteFlag: 0,
-        fileId: '996450467172061184',
-        fileName: 'Dingtalk_20220629165919.jpg',
-        fileSize: '25687',
-        folderName: '',
-        id: '996450467230781440',
-        parentId: '0',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:18:24',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761727877120',
-        fileName: '车辆档案.xlsx',
-        fileSize: '9929',
-        folderName: '',
-        id: '996449761778208768',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761677545472',
-        fileName: '车辆档案错误记录 (1).xlsx',
-        fileSize: '3900',
-        folderName: '',
-        id: '996449761753042944',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761706905600',
-        fileName: '车辆档案错误记录 (2).xlsx',
-        fileSize: '3901',
-        folderName: '',
-        id: '996449761769820160',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761681739776',
-        fileName: '车辆档案错误记录.xlsx',
-        fileSize: '3901',
-        folderName: '',
-        id: '996449761753042945',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      }
-    ]
     return {
-      datacenterArr,
+      dataList: [],
       currentFile: {}
     }
   },
+  created() {
+    this.fetchList()
+  },
   methods: {
+    toClick() {
+      this.actions({
+        key: 'toClick',
+        obj: this.comp
+      })
+    },
+    toMore() {
+      this.actions({
+        key: 'toMore',
+        obj: this.comp
+      })
+    },
     toPreview(item) {
-      this.currentFile = item
+      let nextUrl = `${this.requestConfig.requestUrl}/portal/pf/notice/downloadFile/${item.fileId}?accessToken=${this.requestConfig.accessToken}`
+      if (!nextUrl.startsWith('http://') && !url1.startsWith('https://')) {
+        nextUrl = location.origin + nextUrl;
+      }
+      let nextInfo = {
+        name: item.fileName,
+        size: parseInt(item.longFileSize),
+        url: nextUrl
+      }
+      this.currentFile = {
+        ...item,
+        nextUrl,
+        nextInfo
+      }
       this.$refs.yxtDialogRef.openOrClose()
     },
     toDownload(item) {
-      this.$message({ type: 'warning', message: `下载功能开发中...${item.fileName}` })
+      let nextUrl = `${this.requestConfig.requestUrl}/portal/pf/notice/downloadFile/${item.fileId}?accessToken=${this.requestConfig.accessToken}`
+      if (!nextUrl.startsWith('http://') && !url1.startsWith('https://')) {
+        nextUrl = location.origin + nextUrl;
+      }
+      window.open(nextUrl, '_blank');
+    },
+    getExtyleValue(key) {
+      let value = this.comp.panel.extyle[key]
+      return value
+    },
+    compFileType(fileName) {
+      return tools.getFileType(fileName)
+    },
+    dialogActions(btn) {
+      console.log('操作：', btn)
+      this.$refs.yxtDialogRef.openOrClose()
+    },
+    async fetchList() {
+      const config = { ...this.requestConfig }
+      const params = { page: 1, size: 5 }
+      await fetchDataCenterList(config, params).then(res => {
+        if (res && res.code == '0') {
+          this.dataList = res.data.dataList
+        } else {
+          this.dataList = []
+        }
+      })
     }
   }
 }
@@ -178,23 +147,34 @@ export default {
 
 .yxt-biss-datacenter {
   height: 100%;
-  .card-perfix-border {
-    border-left: 4px solid $yxt-color-primary;
-    padding-left: 8px;
+  .datacenter-card {
+    background-color: transparent;
+  }
+  .title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    &-lf {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    }
   }
   /deep/ .to-card {
     height: 100%;
+    border: none;
     .to-card__body {
       height: calc(100% - 48px);
     }
   }
   .datacenter-list {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    flex-wrap: wrap;
-    height: 100%;
+    height: inherit;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -204,9 +184,9 @@ export default {
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
-      width: 100%;
-      height: 32px;
-      padding: 8px;
+      width: calc(100% - 24px);
+      height: 46px;
+      padding: 12px;
       border-bottom: 1px dashed $yxt-color-info-hex-d8dade;
       .list-item-link {
         font-size: 16px;
@@ -225,7 +205,7 @@ export default {
         }
         .list-item-sub {
           .datacenter-type-name {
-            font-size: 16px;
+            font-size: 12px;
             color: $yxt-color-info;
           }
         }

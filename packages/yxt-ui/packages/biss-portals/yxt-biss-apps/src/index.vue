@@ -58,7 +58,7 @@ const base = {
   compName: 'YxtBissApps',
   title: '系统应用',
   icon: 'icon-Check-Circle uiicon',
-  type: 'biss',
+  type: 'oth',
   sliceIndex: 5,
   dialogConfig: {
     title: '提示'

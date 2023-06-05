@@ -1,26 +1,37 @@
 <template>
-  <div class="yxt-biss-forgets">
-    <to-card>
-      <div slot="header">
-        <span class="card-perfix-border">{{ comp.title }}</span>
+  <div class="yxt-biss-forgets" @click.stop="toClick">
+    <to-card class="forgets-card">
+      <div slot="header" class="title-flex">
+        <div class="title-flex-lf">
+          <yxt-svg-icon :icon="getExtyleValue('iconClazz').current" style="width:20px;margin: 0 6px 0 10px"></yxt-svg-icon>
+          <span>{{ comp.panel.content.base_rows[0].value }}</span>
+        </div>
         <span slot="reference" class="forgets-tabs" style="float: right;">
-          <span class="tabs-item" :class="activeTab === 'unfinish' ? 'active-tab' : 'unactive-tab'" @click="activeTab = 'unfinish'">未完成</span>
-          <span class="tabs-item" :class="activeTab === 'finished' ? 'active-tab' : 'unactive-tab'" @click="activeTab = 'finished'">已完成</span>
-          <span class="to-icon-circle-plus-outline forgets-tab-add"></span>
+          <span class="tabs-item" :class="activeTab === 'unfinish' ? 'active-tab' : 'unactive-tab'" @click="toChangeTab('unfinish')">未完成</span>
+          <span class="tabs-item" :class="activeTab === 'finished' ? 'active-tab' : 'unactive-tab'" @click="toChangeTab('finished')">已完成</span>
+          <yxt-svg-icon icon="common_add" style="font-size:24px;cursor:pointer;" @click.stop="toAdd"></yxt-svg-icon>
         </span>
       </div>
       <div class="forgets-list">
         <template v-for="(item, index) in forgetsArr">
-          <div :key="index" class="list-item" @click="toPreview(item)">
+          <div :key="index" class="list-item" @click="toEdit(item)">
               <div class="list-item-link">
-                <span class="to-icon-link"></span>
+                <yxt-svg-icon class="sub-icon" icon="common_time" style="width:16px;margin: 0 6px 0 10px"></yxt-svg-icon>
               </div>
               <div class="list-item-right">
                 <div class="list-item-ups">
-                  <span>{{ item.fileName }}</span>
+                  <span>{{ item.deadline || item.updateAt  }}</span>
+                  <to-tooltip :content="item.content" placement="top">
+                    <span>{{ item.content }}</span>
+                  </to-tooltip>
                 </div>
-                <div class="list-item-sub" @click.stop="toDownload(item)">
-                  <span class="forgets-type-name to-icon-check"></span>
+                <div class="list-item-sub">
+                  <to-tooltip v-if="activeTab === 'unfinish'" content="完成" placement="top">
+                    <yxt-svg-icon class="sub-icon" icon="common_ok" @click.stop="toFinish(item.id, '1')"></yxt-svg-icon>
+                  </to-tooltip>
+                  <to-tooltip v-else content="撤回" placement="top">
+                    <yxt-svg-icon class="sub-icon" icon="common_reback"  @click.stop="toFinish(item.id, '0')"></yxt-svg-icon>
+                  </to-tooltip>
                 </div>
               </div>
           </div>
@@ -31,16 +42,28 @@
       ref="yxtDialogRef"
       width="796px"
       :isAppendToBody="true"
-      :isModalclose="true"
+      :isModalclose="false"
       :isShowClose="true"
-      :btns="[]"
-      :dialogConfig="comp.dialogConfig"
+      :isDestroyOnClose="true"
+      :dialogInfo="dialogConfig"
+      :actions="dialogActions"
+      @dialogDidClosed="dialogDidClosed"
     >
-      <div slot="content" class="card-item-next-content">
-        <span>{{ currentFile.fileName }} - {{ currentFile.createAt }}</span>
-        <br>
-        <br>
-        <span>详细预览内容，略......</span>
+      <div class="card-item-next-content">
+        <div>
+          <YxtForm
+            ref="addFormRef"
+            label-width="90px"
+            :form-items="ADD_FORMS"
+            :form-key="addFormKey"
+            :isAutoFix="false"
+            :rowSpan="1"
+            :isShowBtns="false"
+            :actions="formActions"
+            @getFormValues="addGetFormValues"
+            @resetForm="addResetForm"
+          />
+        </div>
       </div>
     </yxt-dialog>
   </div>
@@ -48,139 +71,269 @@
 <script>
 import YxtDialog from '../../../yxt-dialog'
 import ToCard from '../../../../../element-ui/packages/card'
-
-const base = {
-  id: 'YxtBissForgets',
-  compName: 'YxtBissForgets',
-  title: '备忘清单',
-  icon: 'icon-Time uiicon',
-  type: 'biss'
-}
+import { FORGETS_BASE, ADD_FORMS } from './config.js'
+import { fetchRemarkList, apiFinishRemark, apiGetByType, apiAddRemark, apiUpdateRemark, apiDetailRemark, apiDeleteRemark } from '@/api/index'
+import mixin_requestConfig from '@yxtui/src/mixins/requestConfig'
+import Tools from '@yxtui/src/utils/tools'
 
 export default {
-  base,
+  base: FORGETS_BASE,
   name: 'YxtBissForgets',
   components: {
     YxtDialog,
     ToCard
   },
+  mixins: [mixin_requestConfig],
   props: {
     comp: {
       type: Object,
       default: () => {
-        return base
+        return FORGETS_BASE
       }
+    },
+    actions: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
-    let forgetsArr = [
-      {
-        createAt: '2022-07-13 09:15:17',
-        deleteFlag: 0,
-        fileId: '996706374955044864',
-        fileName: '公务仓申请入库 (5).xlsx',
-        fileSize: '9156',
-        folderName: '',
-        id: '996706375034736640',
-        parentId: '0',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-13 09:15:17',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:18:24',
-        deleteFlag: 0,
-        fileId: '996450467172061184',
-        fileName: 'Dingtalk_20220629165919.jpg',
-        fileSize: '25687',
-        folderName: '',
-        id: '996450467230781440',
-        parentId: '0',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:18:24',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761727877120',
-        fileName: '车辆档案.xlsx',
-        fileSize: '9929',
-        folderName: '',
-        id: '996449761778208768',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761677545472',
-        fileName: '车辆档案错误记录 (1).xlsx',
-        fileSize: '3900',
-        folderName: '',
-        id: '996449761753042944',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761706905600',
-        fileName: '车辆档案错误记录 (2).xlsx',
-        fileSize: '3901',
-        folderName: '',
-        id: '996449761769820160',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      },
-      {
-        createAt: '2022-07-12 16:15:36',
-        deleteFlag: 0,
-        fileId: '996449761681739776',
-        fileName: '车辆档案错误记录.xlsx',
-        fileSize: '3901',
-        folderName: '',
-        id: '996449761753042945',
-        parentId: '996449710599311360',
-        tenantId: '1',
-        type: 1,
-        updateAt: '2022-07-12 16:15:36',
-        userId: '1'
-      }
-    ]
     return {
-      forgetsArr,
+      ADD_FORMS,
+      forgetsArr: [],
+      unfinishList: [],
+      finishedList: [],
       currentFile: {},
-      activeTab: 'unfinish'
+      activeTab: 'unfinish',
+      tag: 'add', // 'add' | 'edit'
+      addFormKey: {},
+      dialogConfig: {
+        coxbtn: { label: '删除', value: 'delete', type: 'danger', size: 'medium' },
+        btns: [
+          { label: '取消', value: 'reset', type: 'normal', size: 'medium' },
+          { label: '确定', value: 'fetch', type: 'primary', size: 'medium' }
+        ],
+        tipIcon: 'uiicon icon-Time',
+        iconColor: '#2E78FF',
+        title: '新建备忘'
+      }
     }
   },
+  created() {
+    this.getRemarkList()
+    this.fetchType()
+  },
   methods: {
-    toPreview(item) {
-      this.currentFile = item
-      this.$refs.yxtDialogRef.openOrClose()
+    toClick() {
+      this.actions({
+        key: 'toClick',
+        obj: this.comp
+      })
     },
     toDownload(item) {
       this.$message({ type: 'warning', message: `下载功能开发中...${item.fileName}` })
+    },
+    getExtyleValue(key) {
+      let value = this.comp.panel.extyle[key]
+      return value
+    },
+    toChangeTab(tag) {
+      this.activeTab = tag
+      this.getRemarkList()
+    },
+    toAdd() {
+      this.tag = 'add'
+      this.dialogConfig.title = '新建备忘'
+      const obj = this.dialogConfig.btns.find(o => o.value === 'delete')
+      obj ? this.dialogConfig.btns.remove(obj) : null
+      this.$refs.yxtDialogRef.openOrClose()
+    },
+    toEdit(item) {
+      this.tag = 'edit'
+      this.dialogConfig.title = '编辑备忘'
+      this.dialogConfig.btns.push(this.dialogConfig.coxbtn)
+      this.fetchDetail(item.id, dt => {
+        this.addFormKey = dt
+        this.ADD_FORMS.map(i => {
+          if (i.id === 'memoReminderType') {
+            if (this.addFormKey.deadline) {
+              i.hidden = false
+            } else {
+              i.hidden = true
+            }
+          }
+          return i
+        })
+        this.$refs.yxtDialogRef.openOrClose()
+      })
+    },
+    formActions(key) {
+      if (key === 'changeDatePicker') {
+        this.ADD_FORMS.map(i => {
+          if (i.id === 'memoReminderType') {
+            if (this.addFormKey.deadline) {
+              i.hidden = false
+            } else {
+              i.hidden = true
+            }
+          }
+          return i
+        })
+      }
+    },
+    dialogActions(btn) {
+      this.$refs.addFormRef.handleTransferAction(btn)
+      if (btn.value === 'delete') {
+        const h = this.$createElement
+        this.$msgbox({
+          title: '操作确认',
+          message: h('p', null, [
+            h('h3', null, '确认删除该备忘吗？'),
+            h('p', {
+              style: 'color: #666666'
+            }, '该操作不可恢复')
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const config = { ...this.requestConfig }
+          apiDeleteRemark(config, this.addFormKey.id).then(res => {
+            if (res && res.code == '0') {
+              this.$message({ type: 'success', message: '已删除' })
+              this.$refs.yxtDialogRef.openOrClose()
+              this.getRemarkList()
+            } else {
+              this.$message({ type: 'error', message: `操作异常：${res.msg}` })
+            }
+          })
+        })
+      } else if (btn.value === 'reset') {
+        this.$refs.yxtDialogRef.openOrClose()
+      }
+    },
+    dialogDidClosed() {
+      const obj = this.dialogConfig.btns.find(o => o.value === 'delete')
+      obj ? this.dialogConfig.btns.remove(obj) : null
+    },
+    addGetFormValues(e) {
+      if (this.tag === 'add') {
+        this.fetchAdd(e)
+      } else {
+        this.fetchEdit(e)
+      }
+    },
+    addResetForm() {
+      this.addFormKey = {}
+    },
+    async fetchAdd(params) {
+      const config = { ...this.requestConfig }
+      if (!params.memoReminderType) {
+        params.memoReminderType = 'none'
+      }
+      await apiAddRemark(config, params).then(res => {
+        if (res && res.code == '0') {
+          this.$message({ type: 'success', message: '新增成功' })
+          this.$refs.yxtDialogRef.openOrClose()
+          this.getRemarkList()
+        } else {
+          this.$message({ type: 'error', message: `操作异常：${res.msg}` })
+        }
+      })
+    },
+    async fetchDetail(id, callback) {
+      const config = { ...this.requestConfig }
+      await apiDetailRemark(config, id).then(res => {
+        if (res && res.code == '0') {
+          callback(res.data)
+        }
+      })
+    },
+    async fetchEdit(params) {
+      const config = { ...this.requestConfig }
+      if (!params.memoReminderType) {
+        params.memoReminderType = 'none'
+      }
+      await apiUpdateRemark(config, params).then(res => {
+        if (res && res.code == '0') {
+          this.$message({ type: 'success', message: '编辑成功' })
+          this.$refs.yxtDialogRef.openOrClose()
+          this.getRemarkList()
+        } else {
+          this.$message({ type: 'error', message: `操作异常：${res.msg}` })
+        }
+      })
+    },
+    // 获取备忘清单列表
+    async getRemarkList() {
+      const config = { ...this.requestConfig }
+      await fetchRemarkList(config).then(res => {
+        if (res && res.code == '0') {
+          const unfinishList = res.data.find(i => i.status == 0).value || []
+          const finishedList = res.data.find(i => i.status == 1).value || []
+          if (this.activeTab === 'unfinish') {
+            this.forgetsArr = unfinishList
+          } else {
+            this.forgetsArr = finishedList
+          }
+        }
+      })
+    },
+    async toFinish(id, status) {
+      const config = { ...this.requestConfig }
+      await apiFinishRemark(config, { id, status }).then(res => {
+        if (res && res.code == '0') {
+          this.$message({ type: 'success', message: '操作成功' })
+          this.getRemarkList()
+        } else {
+          this.$message({ type: 'error', message: `操作异常：${res.msg}` })
+        }
+      })
+    },
+    async fetchType() {
+      const config = { ...this.requestConfig }
+      await apiGetByType(config, 'memo_reminder_type').then(res => {
+        if (res && res.code == '0') {
+          this.ADD_FORMS = Tools.formatArrObject(
+            {
+              dataList: res.data || [],
+              labelKey: 'dictKey',
+              valueKkey: 'dictCode'
+            },
+            {
+              formItems: ADD_FORMS,
+              formItemId: 'id',
+              formItemKey: 'memoReminderType'
+            }
+          )
+        }
+      })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '../../../../../assets/scss/yxt-variable.scss';
+@import '../../../../../assets/scss/yxt-mixin.scss';
 
 .yxt-biss-forgets {
   height: 100%;
+  .forgets-card {
+    background-color: transparent;
+  }
+  .title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 24px;
+    &-lf {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
   .forgets-tabs {
     display: flex;
     flex-direction: row;
@@ -200,25 +353,22 @@ export default {
     .tabs-item {
       cursor: pointer;
       margin-right: 24px;
+      font-size: 14px;
     }
-  }
-  .card-perfix-border {
-    border-left: 4px solid $yxt-color-primary;
-    padding-left: 8px;
   }
   /deep/ .to-card {
     height: 100%;
+    border: none;
     .to-card__body {
       height: calc(100% - 48px);
     }
   }
   .forgets-list {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    flex-wrap: wrap;
-    height: 100%;
+    height: inherit;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -229,8 +379,8 @@ export default {
       justify-content: flex-start;
       align-items: center;
       width: 100%;
-      height: 32px;
-      padding: 8px;
+      height: 50px;
+      padding: 12px 0;
       border-bottom: 1px dashed $yxt-color-info-hex-d8dade;
       .list-item-link {
         font-size: 16px;
@@ -246,20 +396,39 @@ export default {
         padding-left: 12px;
         .list-item-ups {
           font-size: 14px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          & > span:nth-child(1) {
+            padding-right: 8px;
+            white-space: nowrap;
+            color: $yxt-color-grey-50;
+            font-size: 14px;
+          }
+          & > span:nth-child(2) {
+            @include mixin_ellipsis_more();
+          }
         }
         .list-item-sub {
-          .forgets-type-name {
-            font-size: 16px;
-            color: $yxt-color-info;
-            visibility: hidden;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+          .sub-icon {
+            display: none;
+            width:20px;
+            margin: 0 6px 0 10px;
           }
         }
       }
-    }
-    .list-item:hover .forgets-type-name {
-      visibility: visible;
-      color: red;
-      font-weight: 600;
+      .list-item-right:hover {
+        .sub-icon {
+          display: block;
+          width:20px;
+          margin: 0 6px 0 10px;
+        }
+      }
     }
   }
 }

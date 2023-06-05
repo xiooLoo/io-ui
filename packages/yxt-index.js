@@ -3,6 +3,7 @@
  */
 import './yxt-ui/packages/theme-default/index.scss';
 import './assets/iconfont/iconfont.css';
+import '@yxtui/src/utils/array-next.js'
 // 基础组件
 import YxtTable from './yxt-ui/packages/yxt-table/index';
 import YxtPagination from './yxt-ui/packages/yxt-pagination/index';
@@ -44,16 +45,45 @@ import YxtBissItemTitle from './yxt-ui/packages/biss/yxt-biss-itemTitle/index';
 
 // 门户业务组件
 import YxtBissApps from './yxt-ui/packages/biss-portals/yxt-biss-apps/index';
-import YxtBissTodos from './yxt-ui/packages/biss-portals/yxt-biss-todos/index';
-import YxtBissCommons from './yxt-ui/packages/biss-portals/yxt-biss-commons/index';
-import YxtBissNotices from './yxt-ui/packages/biss-portals/yxt-biss-notices/index';
-import YxtBissDatacenter from './yxt-ui/packages/biss-portals/yxt-biss-datacenter/index';
-import YxtBissForgets from './yxt-ui/packages/biss-portals/yxt-biss-forgets/index';
 // [biss]-轮播图
 import FuncCarousel from './yxt-ui/packages/biss-portals/yxt-func-carousel/index';
 const YxtFuncCarousel = FuncCarousel.YxtFuncCarousel
 const YxtFuncCarouselPanelContent = FuncCarousel.YxtFuncCarouselPanelContent
 const YxtFuncCarouselPanelExtyle = FuncCarousel.YxtFuncCarouselPanelExtyle
+// [biss]-应用
+import YxtBissApp from './yxt-ui/packages/biss-portals/yxt-biss-app/index';
+const YxtImmovableApp = YxtBissApp.YxtImmovableApp
+const YxtVehicleApp = YxtBissApp.YxtVehicleApp
+const YxtEnergyApp = YxtBissApp.YxtEnergyApp
+const YxtStandardApp = YxtBissApp.YxtStandardApp
+const YxtSuperviseApp = YxtBissApp.YxtSuperviseApp
+const YxtBissAppPanelContent = YxtBissApp.YxtBissAppPanelContent
+const YxtBissAppPanelExtyle = YxtBissApp.YxtBissAppPanelExtyle
+// [biss]-常用功能
+import BissCommons from './yxt-ui/packages/biss-portals/yxt-biss-commons/index';
+const YxtBissCommons = BissCommons.YxtBissCommons
+const YxtBissCommonsPanelContent = BissCommons.YxtBissCommonsPanelContent
+const YxtBissCommonsPanelExtyle = BissCommons.YxtBissCommonsPanelExtyle
+// [biss]-通知公告
+import BissNotices from './yxt-ui/packages/biss-portals/yxt-biss-notices/index';
+const YxtBissNotices = BissNotices.YxtBissNotices
+const YxtBissNoticesPanelContent = BissNotices.YxtBissNoticesPanelContent
+const YxtBissNoticesPanelExtyle = BissNotices.YxtBissNoticesPanelExtyle
+// [biss]-资料中心
+import BissDataCenter from './yxt-ui/packages/biss-portals/yxt-biss-datacenter/index';
+const YxtBissDataCenter = BissDataCenter.YxtBissDataCenter
+const YxtBissDataCenterPanelContent = BissDataCenter.YxtBissDataCenterPanelContent
+const YxtBissDataCenterPanelExtyle = BissDataCenter.YxtBissDataCenterPanelExtyle
+// [biss]-备忘清单
+import BissForgets from './yxt-ui/packages/biss-portals/yxt-biss-forgets/index';
+const YxtBissForgets = BissForgets.YxtBissForgets
+const YxtBissForgetsPanelContent = BissForgets.YxtBissForgetsPanelContent
+const YxtBissForgetsPanelExtyle = BissForgets.YxtBissForgetsPanelExtyle
+// [biss]-待办事项
+import BissTodos from './yxt-ui/packages/biss-portals/yxt-biss-todos/index';
+const YxtBissTodos = BissTodos.YxtBissTodos
+const YxtBissTodosPanelContent = BissTodos.YxtBissTodosPanelContent
+const YxtBissTodosPanelExtyle = BissTodos.YxtBissTodosPanelExtyle
 
 // 典型页面
 import YxtBissPage from './yxt-ui/packages/biss-pages/yxt-biss-page/index';
@@ -96,16 +126,33 @@ export const customComponents = [
   YxtSvgIcon,
   YxtBissBaseTable,
   YxtBissItemTitle,
+  YxtBissPage,
+  YxtBissForm,
+  YxtBissDetails,
   YxtBissApps,
-  YxtBissTodos,
-  YxtBissCommons,
-  YxtBissNotices,
-  YxtBissDatacenter,
-  YxtBissForgets,
   YxtFuncCarousel,
   YxtFuncCarouselPanelContent,
   YxtFuncCarouselPanelExtyle,
-  YxtBissPage,
-  YxtBissForm,
-  YxtBissDetails
+  YxtImmovableApp,
+  YxtVehicleApp,
+  YxtEnergyApp,
+  YxtStandardApp,
+  YxtSuperviseApp,
+  YxtBissAppPanelContent,
+  YxtBissAppPanelExtyle,
+  YxtBissCommons,
+  YxtBissCommonsPanelContent,
+  YxtBissCommonsPanelExtyle,
+  YxtBissNotices,
+  YxtBissNoticesPanelContent,
+  YxtBissNoticesPanelExtyle,
+  YxtBissDataCenter,
+  YxtBissDataCenterPanelContent,
+  YxtBissDataCenterPanelExtyle,
+  YxtBissForgets,
+  YxtBissForgetsPanelContent,
+  YxtBissForgetsPanelExtyle,
+  YxtBissTodos,
+  YxtBissTodosPanelContent,
+  YxtBissTodosPanelExtyle
 ];

@@ -5,6 +5,7 @@ import './theme-default/index.scss';
 import { customComponents } from '../../yxt-index';
 import YxtMessage from '../../yxt-ui/packages/yxt-message/index';
 import { YxtGridItem, YxtGridLayout } from '../../yxt-ui/packages/yxt-grid-layout/index';
+import YxtGridViewer from '../../yxt-ui/packages/yxt-grid-viewer/index';
 
 const components = [
   /** ********************************************/
@@ -25,6 +26,7 @@ const install = function (Vue, opts = {}) {
 
   Vue.component('YxtGridLayout', YxtGridLayout);
   Vue.component('YxtGridItem', YxtGridItem);
+  Vue.component('YxtGridViewer', YxtGridViewer);
 
   Vue.prototype.$ELEMENT = {
     size: opts.size || '',
@@ -46,5 +48,6 @@ export default {
   ...customComponents,
   YxtMessage,
   YxtGridItem,
-  YxtGridLayout
+  YxtGridLayout,
+  YxtGridViewer
 };

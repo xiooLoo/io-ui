@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="138px" height="28px" viewBox="0 0 138 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 43</title>
+    <defs>
+        <linearGradient x1="100%" y1="47.6397492%" x2="0%" y2="52.3602508%" id="linearGradient-1">
+            <stop stop-color="#88CDFF" offset="0%"></stop>
+            <stop stop-color="#25A6FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="默认海南门户备份-6" transform="translate(-1251.000000, -491.000000)">
+            <g id="编组-43" transform="translate(1251.000000, 491.000000)">
+                <path d="M119,0 C123.386867,0 127.053534,0 130,0 C132.946466,0 135.389035,2.66666667 137.327705,8 L119,8 L119,0 Z" id="矩形备份-24" fill="#1EA0FF"></path>
+                <path d="M8,0 L128.8736,0 L128.8736,0 C125.321684,0.643166015 122.622938,2.64588783 120.777362,6.00816545 C118.008997,11.0515819 115.841468,18.3728281 112.059792,22.4179291 C109.862585,24.7681895 107.196564,26.4834337 104.061728,27.5636619 C103.223811,27.8522731 102.34378,27.9997636 101.457551,28 L8,28 C3.581722,28 5.41083001e-16,24.418278 0,20 L0,8 C-1.42926142e-15,3.581722 3.581722,-7.65539184e-17 8,0 Z" id="矩形备份-27" fill="url(#linearGradient-1)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

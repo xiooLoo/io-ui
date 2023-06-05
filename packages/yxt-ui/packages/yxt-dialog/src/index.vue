@@ -10,10 +10,12 @@
       :top="top"
       :custom-class="customClass"
       :z-index="zIndex"
+      @close="dialogDidClosed"
     >
       <div class="dialog-title" slot="title">
         <div v-if="dialogInfo.title"  class="promit-title">
-          <span v-if="dialogInfo.tipIcon && dialogInfo.tipIcon.length" class="promit-title-icon" :class="[dialogInfo.tipIcon, cmpTipColor(dialogInfo.tipIcon)]" />
+          <yxt-icon v-if="dialogInfo.tipIcon && dialogInfo.tipIcon.length" :icon="dialogInfo.tipIcon" :color="dialogInfo.iconColor" v-bind="$attrs"></yxt-icon>
+          <!-- <span v-if="dialogInfo.tipIcon && dialogInfo.tipIcon.length" class="promit-title-icon" :class="[dialogInfo.tipIcon, cmpTipColor(dialogInfo.tipIcon)]" /> -->
         </div>
         <div class="dialog-box-i">
           <span class="promit-tip">{{ dialogInfo.title }}</span>
@@ -27,10 +29,10 @@
       <span slot="footer" class="dialog-footer">
         <to-button
           v-for="btn in dialogInfo.btns"
+          class="footer-btn"
           :key="btn.value"
           :type="btn.type"
           :size="btn.size || 'mini'"
-          :class="btn.type === 'primary' ? 'global_button_i' : btn.type === 'normal' ? 'global_button_iii' : btn.type === 'text' ? '' : 'global_button_ii'"
           :disabled="btn.disabled"
           @click="handleActions(btn)"
         >
@@ -41,8 +43,13 @@
   </div>
 </template>
 <script>
+import YxtIcon from '../../yxt-icon'
+
 export default {
   name: 'YxtDialog',
+  component: {
+    YxtIcon
+  },
   props: {
     width: {
       type: String,
@@ -107,18 +114,11 @@ export default {
     openOrClose() {
       this.isVisible = !this.isVisible
     },
-    cmpTipColor(tipIcon) {
-      switch (tipIcon) {
-      case 'to-icon-warning':
-        return 'warning-icon'
-      case 'to-icon-error':
-        return 'delete-icon'
-      default:
-        return 'warning-icon'
-      }
-    },
     handleActions(btn) {
       this.actions(btn)
+    },
+    dialogDidClosed() {
+      this.$emit('dialogDidClosed')
     }
   }
 }
@@ -142,6 +142,13 @@ export default {
   align-items: flex-start;
   .dialog-box-i {
     margin-left: 8px;
+  }
+  .promit-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8px;
+    height: 8px;
   }
 }
 .to-dialog__body {

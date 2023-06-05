@@ -1,20 +1,24 @@
 <template>
-  <div class="yxt-biss-todos">
-    <to-card>
-      <div slot="header">
-        <span class="card-perfix-border">{{ comp.title }}</span>
+  <div class="yxt-biss-todos" @click.stop="toClick">
+    <to-card class="todos-card">
+      <div slot="header" class="title-flex">
+        <yxt-svg-icon :icon="getExtyleValue('iconClazz').current" style="width:20px;height:20px;margin: 0 6px 0 10px"></yxt-svg-icon>
+        <span>{{ comp.panel.content.base_rows[0].value }}</span>
       </div>
       <div class="todos-list">
           <div v-for="(item, index) in todos" :key="index" class="todo-list">
-              <span class="todo-group-name">{{ item.bizGroupName }}</span>
-              <to-row>
-                <to-col v-for="(ele, idx) in item.children"  style="width:auto;margin: 8px;" :key="idx">
-                  <span class="todo-link" @click="toLink(ele)">
-                    <span>{{ ele.bizDesc }}</span>
-                    <span class="link-em"> ({{ ele.num }})</span>
-                  </span>
-                </to-col>
-              </to-row>
+            <div class="todo-list-header" :style="{ backgroundImage: `url(${require('../pngs/'+item[0].bgName+'.png')})`,backgroundSize: `${ item[0].bizGroupName.length * 32 }px 28px` }">
+              <yxt-svg-icon :icon="item[0].bgIconName" style="color:red;width:20px;height:20px;margin: 0 6px 0 10px"></yxt-svg-icon>
+              <span class="todo-group-name">{{ item[0].bizGroupName }}</span>
+            </div>
+            <to-row class="category-content">
+                <div v-for="(ele, idx) in item" :key="idx" class="todo-link" @click="toLink(ele)">
+                <to-badge :value="ele.num" :hidden="ele.num==0" class="item">
+                  <yxt-svg-icon :icon="ele.categoryIconName" style="width:36px;height:36px;"></yxt-svg-icon>
+                </to-badge>
+                  <span class="link-name">{{ ele.bizDesc }}</span>
+                </div>
+            </to-row>
           </div>
       </div>
     </to-card>
@@ -23,33 +27,28 @@
 <script>
 import ToCard from '../../../../../element-ui/packages/card'
 import ToRow from '../../../../../element-ui/packages/row'
-import ToCol from '../../../../../element-ui/packages/col'
-import { fetchSystemList, fetchTodoList } from '@/api/index'
+import { fetchTodoList } from '@/api/index'
 import requestConfig from '@yxtui/src/mixins/requestConfig'
-
-const base = {
-  id: 'YxtBissTodos',
-  compName: 'YxtBissTodos',
-  icon: 'icon-Sort uiicon',
-  title: '待办事项',
-  type: 'biss'
-}
+import { TODOS_BASE, matchBgName, matchBgIconName, matchCategoryIconName } from './config.js'
 
 export default {
-  base,
+  base: TODOS_BASE,
   name: 'YxtBissTodos',
   components: {
     ToCard,
-    ToRow,
-    ToCol
+    ToRow
   },
   mixins: [requestConfig],
   props: {
     comp: {
       type: Object,
       default: () => {
-        return base
+        return TODOS_BASE
       }
+    },
+    actions: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -58,68 +57,43 @@ export default {
     }
   },
   created() {
-    this.toFetchSystemList()
+    this.toFetchTodoList()
   },
   methods: {
+    toClick() {
+      this.actions({
+        key: 'toClick',
+        obj: this.comp
+      })
+    },
     toLink(ele) {
       window.open(ele.newUrl)
     },
-    async toFetchSystemList() {
-      const config = { ...this.requestConfig }
-      await fetchSystemList(config).then(res => {
-        // this.loadingEl.close()
-        if (res && res.code == 0) {
-          res.data.push({
-            code: 'isNext',
-            id: '',
-            name: '房产地产统一管理',
-            sort: 0,
-            url: ''
-          })
-          const apps = res.data
-          this.toFetchTodoList(apps)
-        }
-      })
-    },
-    async toFetchTodoList(apps) {
+
+    async toFetchTodoList() {
       const config = { ...this.requestConfig }
       await fetchTodoList(config).then(res => {
-        // this.loadingEl.close()
         if (res && res.code == 0) {
-          this.dowith(res.data, apps)
+          const resData = res.data
+          const map = new Map()
+          resData.forEach((ele, idx, arr) => {
+            let sParms = ele.url ? (ele.url.indexOf('/') == 0 ? '' : '/') : ''
+            ele.newUrl = `${location.origin}/${ele.bizGroup}/#${sParms}${ele.url}`
+            ele.bgName = matchBgName(ele.bizGroup)
+            ele.bgIconName = matchBgIconName(ele.bizGroup)
+            ele.categoryIconName = matchCategoryIconName(ele.bizCode)
+            if (!map.has(ele.bizGroup)) {
+              map.set(ele.bizGroup, arr.filter(a => a.bizGroup == ele.bizGroup))
+            }
+          })
+          const todosData = Array.from(map).map(item => [...item[1]])
+          this.todos = todosData
         }
       })
     },
-    doWithList(list) {
-      const map = new Map()
-      list.forEach((item, index, arr) => {
-        if (!map.has(item.bizGroup)) {
-          map.set(item.bizGroup, arr.filter(a => a.bizGroup == item.bizGroup))
-        }
-      })
-      return Array.from(map).map(item => [...item[1]])
-    },
-    dowith(resData, apps) {
-      resData.forEach(ele => {
-        let sParms = ele.url ? ele.url.indexOf('/') == 0 ? '' : '/' : ''
-        ele.newUrl = `${location.origin}/${ele.bizGroup}/#${sParms}${ele.url}`
-      })
-      const todos = []
-      const codeArr = apps.map(j => j.code)
-      const todosData = this.doWithList(resData)
-      todosData.forEach(item => {
-        const parentData = {
-          bizCode: item[0].bizCode,
-          bizDesc: item[0].bizDesc,
-          bizGroup: item[0].bizGroup,
-          bizGroupName: item[0].bizGroupName,
-          children: item
-        }
-        if (codeArr.includes(item[0].groupCode)) {
-          todos.push(parentData)
-        }
-      })
-      this.todos = todos
+    getExtyleValue(key) {
+      let value = this.comp.panel.extyle[key]
+      return value
     }
   }
 }
@@ -129,12 +103,45 @@ export default {
 
 .yxt-biss-todos {
   height: 100%;
-  .card-perfix-border {
-    border-left: 4px solid $yxt-color-primary;
-    padding-left: 8px;
+  box-shadow: 0px 0px 20px 0px rgba(20,32,59,0.06);
+  .title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    line-height: 24px;
+  }
+  .todos-card {
+    background-color: transparent;
+  }
+  .todo-list {
+    background-color: $yxt-color-white;
+    width: 100%;
+    margin-bottom: 22px;
+    border-radius: 8px;
+    padding: 8px 0;
+    .todo-list-header {
+      width: 100%;
+      height: 28px;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      margin: -8px 0;
+    }
+    .category-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-x: auto;
+      padding: 20px 0 16px;
+    }
   }
   /deep/ .to-card {
     height: 100%;
+    border: none;
     .to-card__body {
       height: calc(100% - 48px);
     }
@@ -144,23 +151,30 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    height: 100%;
+    height: inherit;
     overflow-y: auto;
     .todo-group-name {
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
+      color: $yxt-color-white;
     }
   }
   .todo-link {
     cursor: pointer;
-    display: block;
-    line-height: 30px;
-    padding: 0px 10px;
-    background-color: $yxt-color-primary-8;
     border-radius: 4px;
-    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 80px;
+    padding: 8px 12px 0 8px;
     .link-em {
       color: $yxt-color-error;
+    }
+    .link-name {
+      font-size: 14px;
+      color: #2B364E;
+      padding-top: 8px;
     }
   }
 }

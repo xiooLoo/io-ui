@@ -97,6 +97,7 @@ import Upload from './element-ui/packages/upload';
 import { customComponents } from './yxt-index';
 import YxtMessage from './yxt-ui/packages/yxt-message/index';
 import { YxtGridItem, YxtGridLayout } from './yxt-ui/packages/yxt-grid-layout/index';
+import YxtGridViewer from './yxt-ui/packages/yxt-grid-viewer/index';
 import lodash from 'lodash'
 
 const components = [
@@ -193,7 +194,6 @@ const install = function (Vue, opts = {}) {
   if (install.installed) {
     return
   }
-
   components.forEach(component => {
     Vue.component(component.name, component);
   });
@@ -203,7 +203,8 @@ const install = function (Vue, opts = {}) {
 
   Vue.component('YxtGridLayout', YxtGridLayout);
   Vue.component('YxtGridItem', YxtGridItem);
-
+  Vue.component('YxtGridViewer', YxtGridViewer);
+  Vue.prototype.$eventBus = new Vue();
   Vue.prototype.$ELEMENT = {
     size: opts.size || '',
     zIndex: opts.zIndex || 2000
@@ -317,5 +318,6 @@ export default {
   ...customComponents,
   YxtMessage,
   YxtGridItem,
-  YxtGridLayout
+  YxtGridLayout,
+  YxtGridViewer
 };

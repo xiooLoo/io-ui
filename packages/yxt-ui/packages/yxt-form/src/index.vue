@@ -115,6 +115,7 @@
                 :editable="item.editable"
                 :disabled="item.disabled"
                 style="width: 100%"
+                @change="changeDatePicker(item)"
               />
               <to-time-picker
                 v-else-if="item.type === 'timeRange'"
@@ -130,12 +131,18 @@
               </div>
               <to-checkbox-group
                 v-else-if="item.type === 'checkbox'"
-                v-model="checkObj[item.id]"
+                v-model="formKey[item.id]"
                 style="display:flex;flex-flow: row wrap;"
                 @change="changeCheckBox(item.id, item)"
                 :disabled="item.disabled"
               >
-                <to-checkbox v-for="itm in item.arr" :key="itm.value" :label="itm.label" :value="itm.value" />
+                <to-checkbox
+                  v-for="itm in item.arr"
+                  :key="itm.value"
+                  :label="itm.value"
+                  :value="itm.value"
+                  :disabled="itm.disabled"
+                >{{ itm.label }}</to-checkbox>
               </to-checkbox-group>
               <to-radio-group
                 v-else-if="item.type === 'radio'"
@@ -162,7 +169,8 @@
                 :max="item.max || 10"
                 label="描述文字"
                 :disabled="item.disabled"
-                :controls-position ="item.position || 'left'"
+                :controls-position="item.position || 'left'"
+                v-bind="item"
                 :placeholder="item.placeholder"
               />
               <to-form-item class="betwItem-form" v-else-if="item.type === 'betwItem'" :prop="item.betws[0].id + '/' + item.betws[1].id">
@@ -381,7 +389,8 @@
                 >
                   <template slot-scope="{ node, data }">
                     <span>{{ data[item.props['label']] || data.label }}</span>
-                    <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                    <!-- item.hideLength不传值或者传flase显示 -->
+                    <span v-if="!item.hideLength && !node.isLeaf"> ({{ data.children.length }}) </span>
                   </template>
                 </to-cascader>
               </to-form-item>
@@ -595,7 +604,6 @@ export default {
   data() {
     return {
       expand: false,
-      checkObj: {},
       apkFileList: [],
       apkFileListSign: [],
       uploadEvents: {
@@ -618,13 +626,6 @@ export default {
         return nval
       }
     }
-  },
-  beforeMount() {
-    this.formItems.map(item => {
-      if (item.type === 'checkbox') {
-        this.$set(this.checkObj, item.id, [])
-      }
-    })
   },
   mounted() {
     let that = this; // 匿名函数的执行环境具有全局性，为防止this丢失这里用that变量保存一下
@@ -706,12 +707,6 @@ export default {
       } else if (btn.value === 'reset') {
         this.$refs['ruleForm'].resetFields();
         this.$emit('resetForm')
-        if (JSON.stringify(this.checkObj) !== '{}') {
-          Object.keys(this.checkObj).forEach(key => {
-            this.formKey[key] = []
-            this.checkObj[key] = []
-          })
-        }
       } else {
         this.actions(btn)
       }
@@ -719,8 +714,11 @@ export default {
     toggle() {
       this.expand = !this.expand;
     },
-    changeCheckBox(id) {
-      this.formKey[id] = this.checkObj[id]
+    changeCheckBox(id, item) {
+      this.actions('changeCheckBox', item)
+    },
+    changeDatePicker(item) {
+      this.actions('changeDatePicker', item)
     },
     handleSuccess(resdata) {
       this.$message({ type: 'success', message: '上传成功' });
@@ -747,12 +745,6 @@ export default {
     resetForm(ruleForm = 'ruleForm') {
       this.$refs[ruleForm].resetFields();
       this.$emit('resetForm')
-      if (JSON.stringify(this.checkObj) !== '{}') {
-        Object.keys(this.checkObj).forEach(key => {
-          this.formKey[key] = []
-          this.checkObj[key] = []
-        })
-      }
     },
     handleCascaderChange(id) {
       const list = this.$refs[id][0].getCheckedNodes()

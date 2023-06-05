@@ -1,12 +1,15 @@
 <template>
-  <div class="yxt-biss-notices">
-    <to-card>
-      <div slot="header">
-        <span class="card-perfix-border">{{ comp.title }}</span>
-        <to-button slot="reference" type="text" style="float: right; padding: 3px 0">更多</to-button>
+  <div class="yxt-biss-notices" @click.stop="toClick">
+    <to-card class="notices-card">
+      <div slot="header" class="title-flex">
+        <div class="title-flex-lf">
+          <yxt-svg-icon :icon="getExtyleValue('iconClazz').current" style="width:20px;margin: 0 6px 0 10px"></yxt-svg-icon>
+          <span>{{ comp.panel.content.base_rows[0].value }}</span>
+        </div>
+        <span slot="reference" style="cursor:pointer; float: right; padding: 0px 0;font-size:14px" @click.stop="toMore">更多</span>
       </div>
       <div class="notices-list">
-        <template v-for="(item, index) in notices">
+        <template v-for="(item, index) in sliceNotices">
           <div :key="index" class="list-item" @click="toDetail(item)">
               <div class="list-item-time">
                 <div>{{ item.day }}</div>
@@ -15,197 +18,165 @@
               <div class="list-item-right">
                 <div class="list-item-ups">
                   <to-tag v-if="item.topNotice" class="notices-tag" type="warning" size="mini">置顶</to-tag>
-                  <span>{{ item.noticeName }}</span>
+                  <to-tooltip :content="item.noticeName" placement="top">
+                    <span class="notice-name">{{ item.noticeName }}</span>
+                  </to-tooltip>
                 </div>
                 <div class="list-item-sub">
                   <span class="notices-type-name">{{ item.noticeTypeName }}</span>
+                  <span v-show="hasValue('0')" class="notices-cuser-name">{{ item.createUserName }}</span>
+                  <span v-show="hasValue('1')" class="notices-ctime-name">{{ item.createAt }}</span>
                 </div>
               </div>
           </div>
         </template>
       </div>
     </to-card>
-    <yxt-dialog
-      ref="yxtDialogRef"
-      width="796px"
-      :isAppendToBody="true"
-      :isModalclose="true"
-      :isShowClose="true"
-      :btns="[]"
-      :dialogConfig="comp.dialogConfig"
-    >
-      <div slot="content" class="card-item-next-content">
-        <span>{{ currentNotice.noticeName }} - {{ currentNotice.createAt }}</span>
-        <br>
-        <br>
-        <span>详细详情，略......</span>
-      </div>
-    </yxt-dialog>
+    <NoticeDialog
+      :notice-val="currentNotice"
+      :dialog-visible="noticeDialogVisible"
+      :requestConfig="comp.requestConfig"
+      @close="closeNotice"
+      @refresh="fetchList"
+    />
   </div>
 </template>
 <script>
-import YxtDialog from '../../../yxt-dialog'
 import ToCard from '../../../../../element-ui/packages/card'
-import ToButton from '../../../../../element-ui/packages/button'
 import ToTag from '../../../../../element-ui/packages/tag'
-
-const base = {
-  id: 'YxtBissNotices',
-  compName: 'YxtBissNotices',
-  title: '通知公告',
-  icon: 'icon-User uiicon',
-  type: 'biss'
-}
+import { NOTICES_BASE } from './config.js'
+import { fetchNoticeList } from '@/api/index'
+import mixin_requestConfig from '@yxtui/src/mixins/requestConfig'
+import NoticeDialog from '../components/NoticeDialog'
 
 export default {
-  base,
+  base: NOTICES_BASE,
   name: 'YxtBissNotices',
   components: {
-    YxtDialog,
     ToCard,
-    ToButton,
-    ToTag
+    ToTag,
+    NoticeDialog
   },
+  mixins: [mixin_requestConfig],
   props: {
     comp: {
       type: Object,
       default: () => {
-        return base
+        return NOTICES_BASE
       }
+    },
+    actions: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
-    let notices = [
-      {
-        createAt: '2022-10-26 11:51:41',
-        createUserId: '1',
-        createUserName: '省局管理员',
-        id: '1034796459345317888',
-        isCurrentUser: 1,
-        messageRemind: [
-          'system'
-        ],
-        noticeName: '测试通知公告',
-        noticeType: '8',
-        noticeTypeName: '通知公告',
-        orgCode: '',
-        receiveRange: 0,
-        tenantId: '1',
-        topNotice: 1,
-        visitsNum: 16
-      },
-      {
-        createAt: '2022-07-12 16:21:46',
-        createUserId: '1',
-        createUserName: '',
-        id: '996451312198488064',
-        isCurrentUser: 1,
-        messageRemind: [
-          'no'
-        ],
-        noticeName: '固定资产处置',
-        noticeType: '33',
-        noticeTypeName: '固定资产',
-        orgCode: '',
-        receiveRange: 0,
-        tenantId: '1',
-        topNotice: 1,
-        visitsNum: 37
-      },
-      {
-        createAt: '2022-07-12 11:51:35',
-        createUserId: '1',
-        createUserName: '',
-        id: '996383319837904896',
-        isCurrentUser: 1,
-        messageRemind: [
-          'no'
-        ],
-        noticeName: '办公用房处理',
-        noticeType: '8',
-        noticeTypeName: '通知公告',
-        orgCode: '',
-        receiveRange: 0,
-        tenantId: '1',
-        topNotice: 0,
-        visitsNum: 21
-      },
-      {
-        createAt: '2022-07-11 15:29:22',
-        createUserId: '1',
-        createUserName: '',
-        id: '996075738456133632',
-        isCurrentUser: 1,
-        messageRemind: [
-          'no'
-        ],
-        noticeName: '资产统一盘点',
-        noticeType: '33',
-        noticeTypeName: '固定资产',
-        orgCode: '',
-        receiveRange: 0,
-        tenantId: '1',
-        topNotice: 0,
-        visitsNum: 15
-      },
-      {
-        createAt: '2022-07-07 16:13:01',
-        createUserId: '1',
-        createUserName: '',
-        id: '994637171972378624',
-        isCurrentUser: 1,
-        messageRemind: [
-          'system'
-        ],
-        noticeName: '56',
-        noticeType: '7',
-        noticeTypeName: '公务用车',
-        orgCode: '',
-        receiveRange: 0,
-        tenantId: '1',
-        topNotice: 0,
-        visitsNum: 18
-      }
-    ].map(v => ({
-      ...v,
-      month: new Date(v.createAt).getMonth() + 1,
-      day: new Date(v.createAt).getDate()
-    }))
     return {
-      notices,
-      currentNotice: {}
+      notices: [],
+      currentNotice: {},
+      noticeDialogVisible: false
+    }
+  },
+  created() {
+    this.fetchList()
+  },
+  computed: {
+    hasValue() {
+      return function(tag) {
+        const values = this.comp.panel.content.exec_rows.find(r => r.id === 'field').value
+        return values.includes(tag)
+      }
+    },
+    sliceNotices() {
+      const lineCount = Number(this.comp.panel.content.exec_rows.find(r => r.id === 'lineCount').value)
+      if (this.notices.length >= lineCount) {
+        return this.notices.slice(0, lineCount)
+      } else {
+        return this.notices
+      }
     }
   },
   methods: {
+    toClick() {
+      this.actions({
+        key: 'toClick',
+        obj: this.comp
+      })
+    },
+    toMore() {
+      this.actions({
+        key: 'toMore',
+        obj: this.comp
+      })
+    },
     toDetail(item) {
       this.currentNotice = item
-      this.$refs.yxtDialogRef.openOrClose()
+      this.noticeDialogVisible = true;
+    },
+    getExtyleValue(key) {
+      let value = this.comp.panel.extyle[key]
+      return value
+    },
+    closeNotice() {
+      this.noticeDialogVisible = false;
+    },
+    async fetchList() {
+      const config = { ...this.requestConfig }
+      const params = { page: 1, size: 5 }
+      await fetchNoticeList(config, params).then(res => {
+        if (res && res.code == '0') {
+          let arrs = []
+          res.data.dataList.forEach(v => {
+            arrs.push({
+              ...v,
+              month: new Date(v.createAt).getMonth() + 1,
+              day: new Date(v.createAt).getDate()
+            })
+          })
+          this.notices = arrs || []
+        } else {
+          this.notices = []
+        }
+      })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '../../../../../assets/scss/yxt-variable.scss';
+@import '../../../../../assets/scss/yxt-mixin.scss';
 
 .yxt-biss-notices {
   height: 100%;
-  .card-perfix-border {
-    border-left: 4px solid $yxt-color-primary;
-    padding-left: 8px;
+  .notices-card {
+    background-color: transparent;
+  }
+  .title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 24px;
+    &-lf {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    }
   }
   /deep/ .to-card {
     height: 100%;
+    border: none;
     .to-card__body {
       height: calc(100% - 48px);
     }
   }
   .notices-list {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    flex-wrap: wrap;
-    height: 100%;
+    height: inherit;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -216,8 +187,8 @@ export default {
       justify-content: flex-start;
       align-items: center;
       width: 100%;
-      height: 62px;
-      padding: 8px;
+      height: 72px;
+      padding: 12px 0;
       border-bottom: 1px dashed $yxt-color-info-hex-d8dade;
       .list-item-time {
         font-size: 12px;
@@ -232,6 +203,14 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        & > div:nth-child(1) {
+          font-size: 14px;
+          color: $yxt-color-grey;
+        }
+        & > div:nth-child(2) {
+          font-size: 12px;
+          color: $yxt-color-grey-70;
+        }
       }
       .list-item-right {
         display: flex;
@@ -239,16 +218,36 @@ export default {
         justify-content: space-between;
         align-items: flex-start;
         height: 100%;
+        width: calc(100% - 48px);
         padding-left: 12px;
         .list-item-ups {
           font-size: 14px;
+          width: 100%;
+          display: flex;
           & > .notices-tag {
-            padding: 0 12px;
-            margin-right: 12px;
+            padding: 0 6px;
+            margin-right: 6px;
+            border-radius: 2px;
+          }
+          .notice-name {
+            font-size: 14px;
+            color: $yxt-color-grey;
+            @include mixin_ellipsis_more(2);
+            display: inline-block;
           }
         }
         .list-item-sub {
           .notices-type-name {
+            font-size: 12px;
+            color: $yxt-color-info;
+          }
+          .notices-cuser-name {
+            padding-left: 12px;
+            font-size: 12px;
+            color: $yxt-color-info;
+          }
+          .notices-ctime-name {
+            padding-left: 12px;
             font-size: 12px;
             color: $yxt-color-info;
           }

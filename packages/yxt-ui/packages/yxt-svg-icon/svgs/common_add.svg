@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 10备份</title>
+    <defs>
+        <filter x="-50.0%" y="-50.0%" width="200.0%" height="200.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="1" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.180392157   0 0 0 0 0.470588235   0 0 0 0 1  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#5AAFFF" offset="0%"></stop>
+            <stop stop-color="#337EFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="默认海南门户备份-6" transform="translate(-1153.000000, -742.000000)">
+            <g id="编组-10备份" transform="translate(1162.000000, 751.000000)">
+                <g id="编组-7备份-3" filter="url(#filter-1)" fill="url(#linearGradient-2)">
+                    <circle id="椭圆形备份-28" cx="12" cy="12" r="12"></circle>
+                </g>
+                <g id="编组" transform="translate(6.000000, 6.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <path d="M11.1773304,6.7640625 L6.75909535,6.7640625 L6.75909535,11.1830034 C6.75909535,11.6136275 6.40984996,11.9625266 5.97921254,11.9625266 C5.54858842,11.9625266 5.19934304,11.6136275 5.19934304,11.1830034 L5.19934304,6.7640625 L0.781081321,6.7640625 C0.350097656,6.7640625 0.00119850852,6.41516335 0.00119850852,5.98452592 C0.00119850852,5.55406161 0.350137607,5.20500266 0.781081321,5.20500266 L5.19931641,5.20500266 L5.19931641,0.78606179 C5.19931641,0.355597479 5.54856179,0.00653852983 5.9791859,0.00653852983 C6.40982333,0.00653852983 6.75906871,0.355610795 6.75906871,0.78606179 L6.75906871,5.20501598 L11.1773038,5.20501598 C11.6082875,5.20501598 11.9571999,5.55406161 11.9571999,5.98451261 C11.9571999,6.41513672 11.6083008,6.76402255 11.1773038,6.76402255 L11.1773304,6.7640625 Z" id="路径"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

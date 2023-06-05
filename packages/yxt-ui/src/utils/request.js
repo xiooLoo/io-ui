@@ -1,6 +1,6 @@
 import axios from 'axios';
 import UtilsConfig from './config';
-import qs from 'qs';
+// import qs from 'qs';
 
 const serviceAxios = axios.create({
   timeout: 10000, // 请求超时设置
@@ -11,13 +11,16 @@ serviceAxios.interceptors.request.use(
   config => {
     if (UtilsConfig.useTokenAuthorization) {
       config.headers['accessToken'] = config.headers.accessToken
-      config.headers.tenantId = config.headers.tenantId || '1'
-      config.headers.roleId = config.headers.roleId || '14'
+      config.headers['tenantId'] = config.headers.tenantId
+      config.headers['roleId'] = config.headers.roleId
+      config.headers['applicationCode'] = config.headers.applicationCode
+      config.headers['applicationId'] = config.headers.applicationId
+      config.headers['enterpriseCode'] = config.headers.enterpriseCode
     }
     if (!config.headers['content-type']) {
       if (config.method === 'post') {
-        config.headers['content-type'] = 'application/x-www-form-urlencoded';
-        config.data = qs.stringify(config.data);
+        config.headers['content-type'] = 'application/json';
+        // config.data = qs.stringify(config.data);
       } else {
         config.headers['content-type'] = 'application/json';
       }
