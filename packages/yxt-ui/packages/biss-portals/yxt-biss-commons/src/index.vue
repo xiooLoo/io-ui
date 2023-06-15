@@ -119,7 +119,10 @@ export default {
 .yxt-biss-commons {
   height: 100%;
   .commons-card {
-    background-color: transparent;
+    background: url('https://pic.imgdb.cn/item/647effe21ddac507ccce5324.png');
+    background-size: 110% 115%;
+    background-repeat: no-repeat;
+    background-position: -40px -50px;
   }
   .title-flex {
     display: flex;

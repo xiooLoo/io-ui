@@ -151,6 +151,7 @@ export default {
       this.tag = 'edit'
       this.dialogConfig.title = '编辑备忘'
       this.dialogConfig.btns.push(this.dialogConfig.coxbtn)
+      this.$refs.yxtDialogRef.openOrClose()
       this.fetchDetail(item.id, dt => {
         this.addFormKey = dt
         this.ADD_FORMS.map(i => {
@@ -163,7 +164,6 @@ export default {
           }
           return i
         })
-        this.$refs.yxtDialogRef.openOrClose()
       })
     },
     formActions(key) {
@@ -319,7 +319,7 @@ export default {
 .yxt-biss-forgets {
   height: 100%;
   .forgets-card {
-    background-color: transparent;
+    background-color: rgba(255,255,255,0.6);
   }
   .title-flex {
     display: flex;

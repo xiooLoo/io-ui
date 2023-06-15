@@ -30,6 +30,7 @@ import YXTUI from '../lib/umd/yxt-ui.common.js';
 import '../lib/umd/yxt-ui.css';
 Vue.use(YXTUI);
 */
+
 const quarterOfYear = require('dayjs/plugin/quarterOfYear')
 dayjs.extend(quarterOfYear)
 Vue.prototype.dayjs = dayjs

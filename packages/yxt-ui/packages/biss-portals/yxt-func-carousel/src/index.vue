@@ -81,7 +81,7 @@ export default {
   width: 100%;
   height: 100%;
   .carousel-card {
-    background-color: transparent;
+    background-color: rgba(255,255,255,0.6);
   }
   .os-img-box {
     width: 100%;

@@ -148,7 +148,7 @@ export default {
 .yxt-biss-datacenter {
   height: 100%;
   .datacenter-card {
-    background-color: transparent;
+    background-color: rgba(255,255,255,0.6);
   }
   .title-flex {
     display: flex;

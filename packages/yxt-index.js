@@ -89,6 +89,8 @@ const YxtBissTodosPanelExtyle = BissTodos.YxtBissTodosPanelExtyle
 import YxtBissPage from './yxt-ui/packages/biss-pages/yxt-biss-page/index';
 import YxtBissDetails from './yxt-ui/packages/biss-pages/yxt-biss-details/index';
 import YxtBissForm from './yxt-ui/packages/biss-pages/yxt-biss-form/index';
+import YxtBissLogin from './yxt-ui/packages/biss-pages/yxt-biss-login/index';
+
 
 export const customComponents = [
   YxtTable,
@@ -128,6 +130,7 @@ export const customComponents = [
   YxtBissItemTitle,
   YxtBissPage,
   YxtBissForm,
+  YxtBissLogin,
   YxtBissDetails,
   YxtBissApps,
   YxtFuncCarousel,

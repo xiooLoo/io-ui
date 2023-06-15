@@ -149,7 +149,7 @@ export default {
 .yxt-biss-notices {
   height: 100%;
   .notices-card {
-    background-color: transparent;
+    background-color: rgba(255,255,255,0.6);
   }
   .title-flex {
     display: flex;

@@ -4,6 +4,7 @@
       :visible.sync="isVisible"
       :width="width"
       :destroy-on-close="isDestroyOnClose"
+      :modal-append-to-body="isModalAppendToBody"
       :append-to-body="isAppendToBody"
       :show-close="isShowClose"
       :close-on-click-modal="isModalclose"
@@ -66,6 +67,10 @@ export default {
     isDestroyOnClose: {
       type: Boolean,
       default: false
+    },
+    isModalAppendToBody: {
+      type: Boolean,
+      default: true
     },
     isAppendToBody: {
       type: Boolean,

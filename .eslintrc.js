@@ -29,7 +29,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off', /**禁用 console */
     'comma-dangle': [ 'error', 'never' ], /**禁止使用拖尾逗号 */
     'indent': [ 'error', 2 ], /**2个空格缩进 */
-    'max-len': [ 'error', { 'code': 1000 } ], /**强制一行的最大长度1000 */
+    'max-len': 'off', /**强制一行的最大长度1000，备用：[ 'error', { 'code': 5000 } ] */
     'no-mixed-spaces-and-tabs': [ 'error', 'smart-tabs' ], /**使用 空格 和 tab 混合缩进 */
     'no-ternary': 'off', /**允许使用三元表达式 */
     'no-nested-ternary': 'off', /**允许使用嵌套的三元表达式 */

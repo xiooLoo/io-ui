@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="home" :style="{ backgroundImage: bg ? `url(${ bg })` : `url('https://pic1.imgdb.cn/item/646f383bf024cca1739ba4d2.jpg')` }"> -->
     <yxt-grid-layout
       :layout.sync="compLayouts"
       :col-num="colNum"
@@ -26,7 +25,6 @@
         <component :is="item.comp.compName" :comp="item.comp"></component>
       </yxt-grid-item>
     </yxt-grid-layout>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -46,19 +44,24 @@ export default {
       type: [String, Number],
       default: 24
     },
+    requestConfig: {
+      type: Object,
+      default: null
+    },
     layouts: {
       type: Array,
       default: () => []
     }
   },
-  data() {
-    return {
-      // compLayouts: this.layouts
-    }
-  },
   computed: {
     compLayouts: {
       get() {
+        if (this.requestConfig !== null) {
+          this.layouts.map(i => {
+            i.comp.requestConfig = this.requestConfig
+            return i
+          })
+        }
         return this.layouts
       },
       set(nval) {
