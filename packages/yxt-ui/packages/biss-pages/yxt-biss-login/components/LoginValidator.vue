@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'LoginValidator',
-  data() {
+  data () {
     return {
       beginClientX: 0,
       mouseMoveState: false,
@@ -27,7 +27,7 @@ export default {
   /**
    * 组件挂载的时候添加事件计算滑动的宽度
    */
-  mounted() {
+  mounted () {
     this.maxWidth = this.$refs.dragDiv.clientWidth - this.$refs.moveDiv.clientWidth
     document
       .getElementsByTagName('html')[0]
@@ -40,14 +40,14 @@ export default {
     /**
      * 对外暴露的一个是否完成的方法
      */
-    isFinish() {
+    isFinish () {
       return this.confirmSuccess
     },
 
     /**
      * 鼠标点击事件
      */
-    mouseDownFn(e) {
+    mouseDownFn (e) {
       if (!this.confirmSuccess) {
         e.preventDefault && e.preventDefault() // 阻止文字选中等 浏览器默认事件
         this.mouseMoveState = true
@@ -58,9 +58,9 @@ export default {
     /**
      * 鼠标移动事件
      */
-    mouseMoveFn(e) {
+    mouseMoveFn (e) {
       if (this.mouseMoveState) {
-        let width = e.clientX - this.beginClientX
+        const width = e.clientX - this.beginClientX
         if (width > 0 && width <= this.maxWidth) {
           const handerDom = document.querySelectorAll('.handler')
           handerDom[0].style.left = `${width}px`
@@ -75,9 +75,9 @@ export default {
     /**
      * 鼠标抬起的事件
      */
-    moseUpFn(e) {
+    moseUpFn (e) {
       this.mouseMoveState = false
-      let width = e.clientX - this.beginClientX
+      const width = e.clientX - this.beginClientX
       if (width < this.maxWidth) {
         const handlerDom = document.querySelectorAll('.handler')
         handlerDom[0].style.left = `${0}px`
@@ -87,7 +87,7 @@ export default {
     },
 
     // 验证成功函数
-    successFunction() {
+    successFunction () {
       this.confirmSuccess = true
       this.confirmWords = '验证通过'
       // 清除绑定的事件

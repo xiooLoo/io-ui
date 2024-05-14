@@ -1,8 +1,7 @@
-import YxtBissLogin from './src/index.vue';
+import YxtBissLogin from './src/index.vue'
 
 YxtBissLogin.install = function (Vue) {
-  Vue.component(YxtBissLogin.name, YxtBissLogin);
-};
+  Vue.component(YxtBissLogin.name, YxtBissLogin)
+}
 
-export default YxtBissLogin;
-
+export default YxtBissLogin
