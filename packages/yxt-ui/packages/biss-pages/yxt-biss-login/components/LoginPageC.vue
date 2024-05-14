@@ -142,7 +142,7 @@ $yxt-color-text-1: #2B364E;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    padding: 74px 0 0 0;
+    padding: 74px 0 0;
     width: 100%;
     height: calc(100% - 60px);
     .mid-left {
@@ -175,7 +175,7 @@ $yxt-color-text-1: #2B364E;
         height: calc(100% - 115px);
         .form-box {
           ::v-deep .to-col-24 {
-            padding: 0 0 !important;
+            padding: 0 !important;
           }
           width: 370px;
           min-height: 467px;

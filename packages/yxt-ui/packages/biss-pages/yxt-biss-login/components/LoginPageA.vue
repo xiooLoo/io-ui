@@ -129,7 +129,7 @@ $yxt-color-text-1: #2B364E;
       height: calc(100% - 115px);
       .form-box {
         ::v-deep .to-col-24 {
-          padding: 0 0 !important;
+          padding: 0 !important;
         }
         width: 370px;
         height: 467px;

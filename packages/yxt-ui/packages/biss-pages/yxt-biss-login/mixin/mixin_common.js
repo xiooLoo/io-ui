@@ -12,7 +12,7 @@ export default {
       default: () => {}
     }
   },
-  data() {
+  data () {
     const tabs = [
       { id: '1', label: '账号登录', value: '1', badgeValue: 0, code: true },
       { id: '2', label: '手机验证码登录', value: '2', badgeValue: 0, disabled: true, code: true }
@@ -48,7 +48,7 @@ export default {
     }
   },
   methods: {
-    handleTabsActions(params) {
+    handleTabsActions (params) {
       console.log('tab切换事件：', params)
       if (params.obj.value == '2') {
         this.$yxtmessage.createElement({ type: 'warning', message: '暂未开放哦' })
@@ -56,19 +56,19 @@ export default {
       }
       this.currentTab = params.obj.value
     },
-    toWechat() {
+    toWechat () {
       this.$yxtmessage.createElement({ type: 'warning', message: '暂未开放哦' })
     },
-    toLogin() {
+    toLogin () {
       const fetchBtn = { label: '保存', value: 'fetch', type: 'primary', code: true }
       this.$refs.yxtFormRef.handleTransferAction(fetchBtn)
     },
-    toLoginNext(e) {
+    toLoginNext (e) {
       if (!this.$refs.loginValidatorRef.isFinish()) {
         this.$message.warning('请完善表单信息或者拖动滑块验证')
         return
       }
-      let params = {
+      const params = {
         username: e.username,
         mobile: e.username,
         password: encrypt(e.password),
@@ -81,7 +81,7 @@ export default {
       this.actions({ key: 'toLoginNext', obj: params })
       this.isLoading = false
     },
-    getOtherQuery(query) {
+    getOtherQuery (query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
           acc[cur] = query[cur]
